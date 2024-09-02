@@ -7,84 +7,88 @@ import ar.edu.utn.frbb.tup.model.exception.CantidadNegativaException;
 import ar.edu.utn.frbb.tup.model.exception.FondosInsuficientesException;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Cuenta {
+    private TipoMoneda tipoMoneda;
+    private long dniTitular;
+    private TipoCuenta tipoCuenta;
     private long numeroCuenta;
     private LocalDateTime fechaCreacion;
-    private double balance;
-    private TipoCuenta tipoCuenta;
-    private Cliente titular;
-    private TipoMoneda moneda;
+    private Double balance = 0d;
+    LinkedList<Movimientos> movimientos;
 
     public Cuenta(){}
     public Cuenta(CuentaDto cuentaDto) {
-        this.numeroCuenta = new Random().nextLong();
-        this.balance = 0;
+        this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
+        this.balance = getBalance();
+        this.dniTitular = cuentaDto.getDniTitular();
         this.fechaCreacion = LocalDateTime.now();
+        this.movimientos = new LinkedList<>();
+        this.numeroCuenta = numeroCuenta();
+        this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
     }
 
-    public Cliente getTitular() {
-        return titular;
+    public TipoMoneda getTipoMoneda() {
+        return tipoMoneda;
     }
 
-    public void setTitular(Cliente titular) {
-        this.titular = titular;
+    public void setTipoMoneda(TipoMoneda tipoMoneda) {
+        this.tipoMoneda = tipoMoneda;
+    }
+
+    public long getDniTitular() {
+        return dniTitular;
+    }
+
+    public void setDniTitular(long dniTitular) {
+        this.dniTitular = dniTitular;
+    }
+
+    public TipoCuenta getTipoCuenta() {
+        return tipoCuenta;
     }
 
     public void setTipoCuenta(TipoCuenta tipoCuenta) {
         this.tipoCuenta = tipoCuenta;
     }
 
-    public TipoCuenta getTipoCuenta() {
-        return this.tipoCuenta;
-    }
-
-    public TipoMoneda getMoneda() {
-        return moneda;
-    }
-
-    public Cuenta setMoneda(TipoMoneda moneda) {
-        this.moneda = moneda;
-        return this;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public Cuenta setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-        return this;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public Cuenta setBalance(double balance) {
-        this.balance = balance;
-        return this;
+    public long getNumeroCuenta() {
+        return numeroCuenta;
     }
 
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public long getNumeroCuenta() {
-        return numeroCuenta;
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
     }
 
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
-    public void debitarDeCuenta(int cantidadADebitar) throws FondosInsuficientesException, CantidadNegativaException {
-        if (cantidadADebitar < 0) {
-            throw new CantidadNegativaException();
-        }
+    public Double getBalance() {
+        return balance;
+    }
 
-        if (balance < cantidadADebitar) {
-            throw new FondosInsuficientesException("No hay suficiente saldo");
-        }
-        this.balance = this.balance - cantidadADebitar;
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public LinkedList<Movimientos> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(LinkedList<Movimientos> movimientos) {
+        this.movimientos = movimientos;
+    }
+
+    public long numeroCuenta() {
+        Random random = new Random();
+        return random.nextLong();
     }
 
 }

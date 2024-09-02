@@ -4,8 +4,8 @@ public class ClienteDto extends PersonaDto {
     private String tipoPersona;
     private String banco;
 
-    public ClienteDto(String nombre, String apellido, long dni, String fechaNacimiento, String direccion, String telefono, String banco, String tipoPersona, int edad) {
-        super(nombre, apellido, dni, fechaNacimiento, direccion, telefono, edad);
+    public ClienteDto(String apellido, String direccion, long dni, String fechaNacimiento, String nombre, String telefono, String banco, String tipoPersona) {
+        super(apellido, direccion, dni, fechaNacimiento, nombre, telefono);
         this.banco = banco;
         this.tipoPersona = tipoPersona;
     }

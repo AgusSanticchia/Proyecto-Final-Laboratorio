@@ -8,10 +8,13 @@ public abstract class Persona {
     private String apellido;
     private long dni;
     private LocalDate fechaNacimiento;
-    private String direccion;
     private String telefono;
+    private String direccion;
 
-    public Persona() {}
+
+    public Persona() {
+    }
+
     public Persona(long dni, String apellido, String nombre, String fechaNacimiento, String telefono, String direccion) {
         this.apellido = apellido;
         this.dni = dni;
@@ -69,10 +72,5 @@ public abstract class Persona {
         this.telefono = telefono;
     }
 
-    public int getEdad() {
-        LocalDate currentDate = LocalDate.now();
-        Period agePeriod = Period.between(fechaNacimiento, currentDate);
-        return agePeriod.getYears();
-    }
 }
 

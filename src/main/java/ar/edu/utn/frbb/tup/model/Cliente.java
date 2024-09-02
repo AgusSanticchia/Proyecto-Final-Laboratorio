@@ -58,18 +58,6 @@ public class Cliente extends Persona {
         return cuentas;
     }
 
-    public void addCuenta(Cuenta cuenta) {
-        if (cuenta != null) {
-            this.cuentas.add(cuenta);
-            cuenta.setTitular(this);
-        }
-    }
-
-    public boolean tieneCuenta(TipoCuenta tipoCuenta, TipoMoneda moneda) {
-        return cuentas.stream()
-                .anyMatch(cuenta -> tipoCuenta.equals(cuenta.getTipoCuenta()) && moneda.equals(cuenta.getMoneda()));
-    }
-
     public void setCuenta(List<Cuenta> cuentas) {
         this.cuentas = new HashSet<>(cuentas);
     }

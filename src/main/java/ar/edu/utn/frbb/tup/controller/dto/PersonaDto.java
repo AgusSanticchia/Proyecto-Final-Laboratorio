@@ -7,16 +7,14 @@ public class PersonaDto {
     private String fechaNacimiento;
     private String telefono;
     private String direccion;
-    private int edad;
 
-    public PersonaDto(String apellido, String direccion, long dni, String fechaNacimiento, String nombre, String telefono, int edad) {
+    public PersonaDto(String apellido, String direccion, long dni, String fechaNacimiento, String nombre, String telefono) {
         this.apellido = apellido;
         this.direccion = direccion;
         this.dni = dni;
         this.fechaNacimiento = fechaNacimiento;
         this.nombre = nombre;
         this.telefono = telefono;
-        this.edad = edad;
     }
 
     public String getNombre() {
@@ -41,37 +39,5 @@ public class PersonaDto {
 
     public String getTelefono() {
         return telefono;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public void setDni(long dni) {
-        this.dni = dni;
-    }
-
-    public void setFechaNacimiento(String fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
     }
 }
