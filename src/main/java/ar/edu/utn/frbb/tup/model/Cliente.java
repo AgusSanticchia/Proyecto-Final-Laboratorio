@@ -1,8 +1,6 @@
 package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
-import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
-import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 
 import java.time.LocalDate;

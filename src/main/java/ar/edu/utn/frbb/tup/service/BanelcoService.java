@@ -11,11 +11,11 @@ public class BanelcoService {
 
     public void transferir(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto) throws TipoMonedaNoCoincidenException, FondosInsuficientesException {
 
-        if (cuentaOrigen.getMoneda() != cuentaDestino.getMoneda()) {
+        if (cuentaOrigen.getTipoMoneda() != cuentaDestino.getTipoMoneda()) {
             throw new TipoMonedaNoCoincidenException("Las monedas no coinciden");
         }
 
-        if (cuentaOrigen.getMoneda() == TipoMoneda.DOLARES) {
+        if (cuentaOrigen.getTipoMoneda() == TipoMoneda.DOLARES) {
             if (cuentaOrigen.getBalance() < monto * 1.005) {
                 throw new FondosInsuficientesException("No hay suficiente saldo");
             }
@@ -25,7 +25,7 @@ public class BanelcoService {
             }
         }
 
-        if (cuentaOrigen.getMoneda() == TipoMoneda.DOLARES) {
+        if (cuentaOrigen.getTipoMoneda() == TipoMoneda.DOLARES) {
             cuentaOrigen.setBalance(cuentaOrigen.getBalance() - monto * 0.005);
         }else {
             cuentaOrigen.setBalance(cuentaOrigen.getBalance() - monto * 0.02);

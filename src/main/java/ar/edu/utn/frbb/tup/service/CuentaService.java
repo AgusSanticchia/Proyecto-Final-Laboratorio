@@ -34,13 +34,13 @@ public class CuentaService {
         }
 
         // Verificar si la cuenta ya existe
-        if (cuentaDao.find(cuentaDto.getNumeroCuenta()) != null) {
-            throw new CuentaAlreadyExistsException("La cuenta " + cuentaDto.getNumeroCuenta() + " ya existe.");
+        if (cuentaDao.find(cuentaDto.getDniTitular()) != null) {
+            throw new CuentaAlreadyExistsException("La cuenta " + cuentaDto.getDniTitular() + " ya existe.");
         }
 
         // Crear la nueva cuenta
         Cuenta nuevaCuenta = new Cuenta(cuentaDto);
-        nuevaCuenta.setTitular(cliente);
+        nuevaCuenta.setDniTitular(cliente.getDni());
 
         // Verificar si el tipo de cuenta está soportado
         if (!tipoCuentaEstaSoportada(nuevaCuenta)) {
@@ -51,12 +51,12 @@ public class CuentaService {
         cuentaDao.save(nuevaCuenta);
     }
     public boolean tipoCuentaEstaSoportada(Cuenta cuenta){
-        if (cuenta.getMoneda() == TipoMoneda.DOLARES &&
+        if (cuenta.getTipoMoneda() == TipoMoneda.DOLARES &&
                 cuenta.getTipoCuenta() == TipoCuenta.CAJA_AHORRO_DOLAR_US){
             return true;
         }
 
-        return cuenta.getMoneda() == TipoMoneda.PESOS &&
+        return cuenta.getTipoMoneda() == TipoMoneda.PESOS &&
                 (cuenta.getTipoCuenta() == TipoCuenta.CUENTA_CORRIENTE_PESOS ||
                         cuenta.getTipoCuenta() == TipoCuenta.CAJA_AHORRO_PESOS);
 

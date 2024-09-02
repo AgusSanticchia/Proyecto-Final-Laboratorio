@@ -34,7 +34,7 @@ public class CuentaDao extends AbstractBaseDao {
         }
         entity.setBalance(cuenta.getBalance());
         entity.setTipoCuenta(cuenta.getTipoCuenta());
-        entity.setMoneda(cuenta.getMoneda());
+        entity.setMoneda(cuenta.getTipoMoneda());
         getInMemoryDatabase().put(cuenta.getNumeroCuenta(), entity);
 
         return entity.toCuenta();

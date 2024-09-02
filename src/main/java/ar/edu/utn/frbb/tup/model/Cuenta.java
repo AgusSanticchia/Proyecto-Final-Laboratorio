@@ -3,8 +3,6 @@ package ar.edu.utn.frbb.tup.model;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-import ar.edu.utn.frbb.tup.model.exception.CantidadNegativaException;
-import ar.edu.utn.frbb.tup.model.exception.FondosInsuficientesException;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
