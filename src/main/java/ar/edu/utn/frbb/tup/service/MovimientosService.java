@@ -20,9 +20,6 @@ import java.util.UUID;
 public class MovimientosService {
 
     @Autowired
-    private CuentaService cuentaService;
-
-    @Autowired
     private CuentaDao cuentaDao;
 
     @Autowired

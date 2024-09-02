@@ -2,7 +2,6 @@ package ar.edu.utn.frbb.tup.controller;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.*;
 import ar.edu.utn.frbb.tup.service.CuentaService;
@@ -20,9 +19,6 @@ public class CuentaController {
 
     @Autowired
     private CuentaValidator cuentaValidator;
-
-    @Autowired
-    private ClienteValidator clienteValidator;
 
     @PostMapping
     public ResponseEntity<String> createCuenta(@RequestBody CuentaDto cuentaDto, @RequestBody ClienteDto clienteDto) {
