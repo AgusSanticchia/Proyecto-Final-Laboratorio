@@ -27,8 +27,8 @@ public class MovimientosController {
 
 
    @PostMapping("/transferencia")
-    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosTransferenciasDto) throws FondosInsuficientesException {
-        
+    public Movimientos transferencia(@RequestBody MovimientosDto movimientoDto) throws FondosInsuficientesException {
+        movimientosValidator.validateMovimientos(movimientoDto);
         return null; //null provisorio como el resto de los nulls
     }
 

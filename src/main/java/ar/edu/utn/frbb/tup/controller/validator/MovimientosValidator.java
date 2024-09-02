@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class MovimientosValidator {
 
   public void validateMovimientos(MovimientosDto movimientoDto){
-        validateMoneda(movimientoDto);
+      validateMoneda(movimientoDto);
   }
 
   public void validateMoneda(MovimientosDto movimientoDto) throws DatosIncorrectosException {
