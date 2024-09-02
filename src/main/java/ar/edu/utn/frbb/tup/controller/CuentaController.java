@@ -26,6 +26,7 @@ public class CuentaController {
 
     @PostMapping
     public ResponseEntity<String> createCuenta(@RequestBody CuentaDto cuentaDto, @RequestBody ClienteDto clienteDto) {
+        cuentaValidator.validateCuenta(cuentaDto);
         try {
             cuentaService.darDeAltaCuenta(cuentaDto, clienteDto);
             return ResponseEntity.ok("Cuenta creada exitosamente");
