@@ -9,16 +9,26 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Cuenta {
+    Random r = new Random();
+
+    private static long contadorCuenta = 1;
     private TipoMoneda tipoMoneda;
     private long dniTitular;
     private TipoCuenta tipoCuenta;
     private long numeroCuenta;
     private LocalDateTime fechaCreacion;
+    private String cbu;
     private Double balance = 0d;
     LinkedList<Movimientos> movimientos;
 
-    public Cuenta(){}
+    public Cuenta(){
+        Cuenta.contadorCuenta = contadorCuenta++;
+        this.balance = getBalance();
+        this.fechaCreacion = LocalDateTime.now();
+    }
+
     public Cuenta(CuentaDto cuentaDto) {
+        Cuenta.contadorCuenta = contadorCuenta++;
         this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.balance = getBalance();
         this.dniTitular = cuentaDto.getDniTitular();
@@ -26,6 +36,7 @@ public class Cuenta {
         this.movimientos = new LinkedList<>();
         this.numeroCuenta = numeroCuenta();
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
+        this.cbu = cuentaDto.getCbu() != null ? cuentaDto.getCbu() : generarCbu();
     }
 
     public TipoMoneda getTipoMoneda() {
@@ -66,6 +77,22 @@ public class Cuenta {
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getCbu() {
+        return cbu;
+    }
+
+    public void setCbu(String cbu) {
+        this.cbu = cbu;
+    }
+
+    public String generarCbu(){
+        StringBuilder cbu = new StringBuilder();
+        for (int i = 0; i < 22; i++) {
+            cbu.append(r.nextInt(10));
+        }
+        return this.cbu = cbu.toString();
     }
 
     public Double getBalance() {

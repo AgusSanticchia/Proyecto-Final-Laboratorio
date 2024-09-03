@@ -6,9 +6,9 @@ import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public class Cliente extends Persona {
@@ -17,9 +17,6 @@ public class Cliente extends Persona {
     private String banco;
     private LocalDate fechaAlta;
     private Set<Cuenta> cuentas = new HashSet<>();
-    private String cbu;
-
-    Random r = new Random();
 
     public Cliente(ClienteDto cliente) {
         super(cliente.getDni(), cliente.getApellido(), cliente.getNombre(), cliente.getFechaNacimiento(), cliente.getTelefono(), cliente.getDireccion());
@@ -62,16 +59,13 @@ public class Cliente extends Persona {
         this.cuentas = new HashSet<>(cuentas);
     }
 
-    public String getCbu() {
-        return cbu;
-    }
-
-    public void setCbu(String cbu) {
-        this.cbu = String.valueOf(r.nextInt(900000) + 100000);
-    }
 
     public void addCuenta(Cuenta cuenta) {
         this.cuentas.add(cuenta);
+    }
+
+    public int edad() {
+        return Period.between(getFechaNacimiento(), LocalDate.now()).getYears();
     }
 
     public boolean tieneCuenta(TipoCuenta tipoCuenta, TipoMoneda moneda) {
@@ -81,14 +75,19 @@ public class Cliente extends Persona {
 
     @Override
     public String toString() {
+        
         return "Cliente{" +
                 "nombre='" + getNombre() + '\'' +
                 ", apellido='" + getApellido() + '\'' +
-                ", tipoPersona=" + tipoPersona +
-                ", banco='" + banco + '\'' +
-                ", fechaAlta=" + fechaAlta +
-                ", cuentas=" + cuentas +
-                ", cbu='" + cbu + '\'' +
+                ", dni=" + getDni() +
+                ", fechaNacimiento=" + getFechaNacimiento() +
+                ", telefono='" + getTelefono() + '\'' +
+                ", direccion='" + getDireccion() + '\'' +
+                ", edad=" + edad() +
+                ", tipoPersona=" + getTipoPersona() +
+                ", banco='" + getBanco() + '\'' +
+                ", fechaAlta=" + getFechaAlta() +
+                ", cuentas=" + getCuentas() +
                 '}';
     }
 

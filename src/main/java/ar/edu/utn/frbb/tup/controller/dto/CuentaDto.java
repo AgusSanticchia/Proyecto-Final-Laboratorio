@@ -4,7 +4,9 @@ public class CuentaDto {
     private long dniTitular;
     private String tipoCuenta;
     private String tipoMoneda;
-
+    private String cbu;
+    
+    
     public CuentaDto(long dniTitular, String tipoCuenta, String tipoMoneda) {
         this.dniTitular = dniTitular;
         this.tipoCuenta = tipoCuenta;
@@ -21,5 +23,9 @@ public class CuentaDto {
 
     public String getTipoCuenta() {
         return tipoCuenta;
+    }
+    
+    public String getCbu() {
+        return cbu;
     }
 }
