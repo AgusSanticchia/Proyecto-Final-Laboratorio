@@ -1,14 +1,16 @@
 package ar.edu.utn.frbb.tup.controller;
 
-import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.*;
 import ar.edu.utn.frbb.tup.service.CuentaService;
 import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cuenta")
@@ -21,16 +23,11 @@ public class CuentaController {
     private CuentaValidator cuentaValidator;
 
     @PostMapping
-    public ResponseEntity<String> createCuenta(@RequestBody CuentaDto cuentaDto, @RequestBody ClienteDto clienteDto) {
+    public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteAlreadyExistsException {
         cuentaValidator.validateCuenta(cuentaDto);
-        try {
-            cuentaService.darDeAltaCuenta(cuentaDto, clienteDto);
-            return ResponseEntity.ok("Cuenta creada exitosamente");
-        } catch (CuentaAlreadyExistsException | EdadInvalidaException | DatosIncorrectosException | TipoCuentaNoSoportadaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Cuenta cuenta = cuentaService.darDeAltaCuenta(cuentaDto);
+        return new ResponseEntity<>(cuenta, HttpStatus.CREATED);
     }
-
     @GetMapping("/{idCuenta}")
     public ResponseEntity<Cuenta> getCuentaById(@PathVariable long idCuenta) {
         Cuenta cuenta = cuentaService.findById(idCuenta);
@@ -39,5 +36,10 @@ public class CuentaController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/all")
+    public ResponseEntity <List<Cuenta>> getAllCuentas() {
+        List<Cuenta> cuentas = cuentaService.showCuentas();
+        return ResponseEntity.ok(cuentas);
     }
 }

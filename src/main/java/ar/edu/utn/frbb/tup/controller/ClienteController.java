@@ -3,12 +3,14 @@ package ar.edu.utn.frbb.tup.controller;
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cliente;
-import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.EdadInvalidaException;
+import ar.edu.utn.frbb.tup.model.exception.MenorDeEdadException;
 import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cliente")
@@ -21,7 +23,7 @@ public class ClienteController {
     private ClienteValidator clienteValidator;
 
     @PostMapping
-    public Cliente createCliente(@RequestBody ClienteDto clienteDto) throws ClienteAlreadyExistsException, EdadInvalidaException {
+    public Cliente createCliente(@RequestBody ClienteDto clienteDto) throws MenorDeEdadException {
         clienteValidator.validate(clienteDto);
         return clienteService.darDeAltaCliente(clienteDto);
     }
@@ -31,5 +33,9 @@ public class ClienteController {
         return clienteService.buscarClientePorDni(dni);
     }
 
-
+    @GetMapping("/all")
+    public ResponseEntity <List<Cliente>> getAllClients() {
+        List<Cliente> clientes = clienteService.showClientes();
+        return ResponseEntity.ok(clientes);
+    }
 }

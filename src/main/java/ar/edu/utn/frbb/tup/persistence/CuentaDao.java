@@ -50,4 +50,13 @@ public class CuentaDao extends AbstractBaseDao {
         }
         return cuentasDelCliente;
     }
+
+    public List<Cuenta> findAll() {
+        List<Cuenta> cuentas = new ArrayList<>();
+        for (Object object : getInMemoryDatabase().values()) {
+            CuentaEntity cuentaEntity = ((CuentaEntity) object);
+            cuentas.add(cuentaEntity.toCuenta());
+        }
+        return cuentas;
+    }
 }

@@ -3,7 +3,7 @@ package ar.edu.utn.frbb.tup.controller.validator;
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.EdadInvalidaException;
+import ar.edu.utn.frbb.tup.model.exception.MenorDeEdadException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ public class ClienteValidator {
         validateEdad(clienteDto);
     }
 
-    private void validateEdad(ClienteDto clienteDto) throws DatosIncorrectosException, EdadInvalidaException {
+    private void validateEdad(ClienteDto clienteDto) throws DatosIncorrectosException, MenorDeEdadException {
         LocalDate fechaNacimiento = LocalDate.parse(clienteDto.getFechaNacimiento());
         LocalDate fechaActual = LocalDate.now();
         int edad = Period.between(fechaNacimiento, fechaActual).getYears();

@@ -30,13 +30,6 @@ public class ClienteEntity extends BaseEntity {
         }
     }
 
-    public void addCuenta(Cuenta cuenta) {
-        if (cuentas == null) {
-            cuentas = new ArrayList<>();
-        }
-        cuentas.add(cuenta);
-    }
-
     public Cliente toCliente() {
         Cliente cliente = new Cliente();
         cliente.setDni(getId());

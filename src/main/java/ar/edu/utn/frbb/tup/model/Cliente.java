@@ -1,6 +1,8 @@
 package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
+import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 
 import java.time.LocalDate;
@@ -66,6 +68,15 @@ public class Cliente extends Persona {
 
     public void setCbu(String cbu) {
         this.cbu = String.valueOf(r.nextInt(900000) + 100000);
+    }
+
+    public void addCuenta(Cuenta cuenta) {
+        this.cuentas.add(cuenta);
+    }
+
+    public boolean tieneCuenta(TipoCuenta tipoCuenta, TipoMoneda moneda) {
+        return cuentas.stream()
+            .anyMatch(cuenta -> cuenta.getTipoCuenta().equals(tipoCuenta) && cuenta.getTipoMoneda().equals(moneda));
     }
 
     @Override

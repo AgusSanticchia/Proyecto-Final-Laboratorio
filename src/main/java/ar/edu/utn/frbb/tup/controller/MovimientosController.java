@@ -1,7 +1,6 @@
 package ar.edu.utn.frbb.tup.controller;
 
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
-import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.controller.validator.MovimientosValidator;
 import ar.edu.utn.frbb.tup.model.Movimientos;
 import ar.edu.utn.frbb.tup.model.exception.FondosInsuficientesException;
@@ -22,9 +21,6 @@ public class MovimientosController {
 
     @Autowired
     private MovimientosValidator movimientosValidator;
-
-    @Autowired
-
 
    @PostMapping("/transferencia")
     public Movimientos transferencia(@RequestBody MovimientosDto movimientoDto) throws FondosInsuficientesException {

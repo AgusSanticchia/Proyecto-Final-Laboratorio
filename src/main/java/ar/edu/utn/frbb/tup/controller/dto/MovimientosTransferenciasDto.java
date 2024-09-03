@@ -17,11 +17,11 @@ public class MovimientosTransferenciasDto {
         return monto;
     }
 
-    public long getCuentaDestino() {
+    public long getNumeroCuentaDestino() {
         return cuentaDestino;
     }
 
-    public long getCuentaOrigen() {
+    public long getNumeroCuentaOrigen() {
         return cuentaOrigen;
     }
 

@@ -25,8 +25,6 @@ public class ClienteDao extends AbstractBaseDao {
         }
     }
 
-
-
     public void save(Cliente cliente) {
         if (cliente == null) {
             throw new IllegalArgumentException("El cliente no puede ser nulo");
@@ -49,5 +47,13 @@ public class ClienteDao extends AbstractBaseDao {
     @Override
     protected String getEntityName() {
         return "CLIENTE";
+    }
+
+    public List<Cliente> findAllClientes() {
+        List<Cliente> clientes = new ArrayList<>();
+        for (Object object : getInMemoryDatabase().values()) {
+            clientes.add(((ClienteEntity) object).toCliente());
+        }
+        return clientes;
     }
 }
