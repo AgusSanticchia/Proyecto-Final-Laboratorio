@@ -11,7 +11,7 @@ import java.util.Random;
 public class Cuenta {
     Random r = new Random();
 
-    private static long contadorCuenta = 1;
+    private static long contadorCuenta = 0;
     private TipoMoneda tipoMoneda;
     private long dniTitular;
     private TipoCuenta tipoCuenta;
@@ -22,13 +22,13 @@ public class Cuenta {
     LinkedList<Movimientos> movimientos;
 
     public Cuenta(){
-        Cuenta.contadorCuenta = contadorCuenta++;
+        contadorCuenta = contadorCuenta++;
         this.balance = getBalance();
         this.fechaCreacion = LocalDateTime.now();
     }
 
     public Cuenta(CuentaDto cuentaDto) {
-        Cuenta.contadorCuenta = contadorCuenta++;
+        Cuenta.contadorCuenta = contadorCuenta + 1;
         this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.balance = getBalance();
         this.dniTitular = cuentaDto.getDniTitular();
@@ -115,5 +115,15 @@ public class Cuenta {
         Random random = new Random();
         return random.nextLong(100);
     }
+
+    public static long getContadorCuenta() {
+        return contadorCuenta;
+    }
+
+    public static void setContadorCuenta(long contadorCuenta) {
+        Cuenta.contadorCuenta = contadorCuenta;
+    }
+
+    
 
 }

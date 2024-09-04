@@ -19,7 +19,7 @@ public class Cliente extends Persona {
     private Set<Cuenta> cuentas = new HashSet<>();
 
     public Cliente(ClienteDto cliente) {
-        super(cliente.getDni(), cliente.getApellido(), cliente.getNombre(), cliente.getFechaNacimiento(), cliente.getTelefono(), cliente.getDireccion());
+        super(cliente.getDni(), cliente.getDireccion(), cliente.getNombre(), cliente.getFechaNacimiento(), cliente.getTelefono(), cliente.getApellido());
         this.fechaAlta = LocalDate.now();
         this.tipoPersona = TipoPersona.fromString(cliente.getTipoPersona());
         this.banco = cliente.getBanco();

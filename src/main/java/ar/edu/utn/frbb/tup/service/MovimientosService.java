@@ -1,4 +1,4 @@
-/*package ar.edu.utn.frbb.tup.service;
+package ar.edu.utn.frbb.tup.service;
 
 import org.springframework.stereotype.Service;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;

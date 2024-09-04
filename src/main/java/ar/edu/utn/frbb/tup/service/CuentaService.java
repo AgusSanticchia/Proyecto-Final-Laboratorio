@@ -22,7 +22,7 @@ public class CuentaService {
     @Autowired
     ClienteService clienteService;
 
-    public Cuenta   darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteAlreadyExistsException {
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteAlreadyExistsException {
         Cuenta cuenta = new Cuenta(cuentaDto);
 
         if(cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
