@@ -37,6 +37,7 @@ public class CuentaController {
             return ResponseEntity.notFound().build();
         }
     }
+    
     @GetMapping("/all")
     public ResponseEntity <List<Cuenta>> getAllCuentas() {
         List<Cuenta> cuentas = cuentaService.showCuentas();

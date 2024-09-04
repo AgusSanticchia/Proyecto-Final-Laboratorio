@@ -7,6 +7,7 @@ import ar.edu.utn.frbb.tup.model.exception.MenorDeEdadException;
 import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +24,21 @@ public class ClienteController {
     private ClienteValidator clienteValidator;
 
     @PostMapping
-    public Cliente createCliente(@RequestBody ClienteDto clienteDto) throws MenorDeEdadException {
+    public ResponseEntity<Cliente>  createCliente(@RequestBody ClienteDto clienteDto) throws MenorDeEdadException {
         clienteValidator.validate(clienteDto);
-        return clienteService.darDeAltaCliente(clienteDto);
+        Cliente cliente = clienteService.darDeAltaCliente(clienteDto);
+        return new ResponseEntity<>(cliente, HttpStatus.CREATED);
+
     }
 
     @GetMapping("/{dni}")
-    public Cliente getClientById(@PathVariable long dni) throws ClienteNotFoundException {
-        return clienteService.buscarClientePorDni(dni);
+    public ResponseEntity<Cliente> getClientById(@PathVariable long dni) throws ClienteNotFoundException {
+        Cliente cliente = clienteService.buscarClientePorDni(dni);
+        if (cliente != null) {
+            return ResponseEntity.ok(cliente);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/all")

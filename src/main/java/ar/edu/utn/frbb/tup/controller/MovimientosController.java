@@ -1,4 +1,4 @@
-package ar.edu.utn.frbb.tup.controller;
+/*package ar.edu.utn.frbb.tup.controller;
 
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.validator.MovimientosValidator;
@@ -43,3 +43,4 @@ public class MovimientosController {
     }
 
 }
+*/

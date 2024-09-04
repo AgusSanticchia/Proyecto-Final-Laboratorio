@@ -10,10 +10,6 @@ public enum TipoMoneda {
         this.descripcion = descripcion;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
     public static TipoMoneda fromString(String text) {
         for (TipoMoneda tipo : TipoMoneda.values()) {
             if (tipo.descripcion.equalsIgnoreCase(text)) {
