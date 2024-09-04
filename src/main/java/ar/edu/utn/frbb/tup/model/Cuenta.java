@@ -113,7 +113,7 @@ public class Cuenta {
 
     public long numeroCuenta() {
         Random random = new Random();
-        return random.nextLong();
+        return random.nextLong(100);
     }
 
 }
