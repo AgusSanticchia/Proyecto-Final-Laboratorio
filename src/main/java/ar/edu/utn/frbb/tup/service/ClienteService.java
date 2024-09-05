@@ -22,8 +22,7 @@ public class ClienteService {
         this.clienteDao = clienteDao;
     }
 
-    public Cliente
-    darDeAltaCliente(ClienteDto clienteDto) throws MenorDeEdadException, DatosIncorrectosException {
+    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws MenorDeEdadException, DatosIncorrectosException {
         Cliente cliente = clienteDao.find(clienteDto.getDni());
         if (cliente != null) {
             return cliente;

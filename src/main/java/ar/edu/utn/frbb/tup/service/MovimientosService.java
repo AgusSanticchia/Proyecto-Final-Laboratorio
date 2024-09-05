@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.service;
 
+import ar.edu.utn.frbb.tup.controller.dto.BanelcoDto;
 import org.springframework.stereotype.Service;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
@@ -12,7 +13,6 @@ public class MovimientosService {
 
     @Autowired CuentaDao cuentaDao;
     @Autowired MovimientosDto movimientosDto;
-    @Autowired MovimientosTransferenciasDto movimientosTransferenciaDto;
 
     public void transferir(MovimientosTransferenciasDto movimientosTransferenciaDto, double monto) {
         Cuenta cuentaOrigen = cuentaDao.find(movimientosTransferenciaDto.getNumeroCuentaOrigen());
@@ -45,4 +45,3 @@ public class MovimientosService {
     }
 
 }
-*/
