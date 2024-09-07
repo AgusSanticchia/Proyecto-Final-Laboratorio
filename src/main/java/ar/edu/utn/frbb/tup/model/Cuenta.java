@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Random;
 
 public class Cuenta {
@@ -116,14 +117,16 @@ public class Cuenta {
         return random.nextLong(100);
     }
 
-    public static long getContadorCuenta() {
-        return contadorCuenta;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cuenta cuenta = (Cuenta) o;
+        return tipoMoneda == cuenta.tipoMoneda && tipoCuenta == cuenta.tipoCuenta;
     }
 
-    public static void setContadorCuenta(long contadorCuenta) {
-        Cuenta.contadorCuenta = contadorCuenta;
+    @Override
+    public int hashCode() {
+        return Objects.hash(tipoMoneda, tipoCuenta);
     }
-
-    
-
 }

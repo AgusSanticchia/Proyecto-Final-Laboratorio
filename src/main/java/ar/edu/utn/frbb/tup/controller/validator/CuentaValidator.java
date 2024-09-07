@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.controller.validator;
 
+import ar.edu.utn.frbb.tup.model.exception.TipoMonedaNoSoportadaException;
 import org.springframework.stereotype.Component;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
@@ -18,9 +19,9 @@ public class CuentaValidator {
         }
     }
 
-    private void validateMoneda(CuentaDto cuentaDto) {
+    private void validateMoneda(CuentaDto cuentaDto) throws TipoMonedaNoSoportadaException {
         if (!"ARS".equals(cuentaDto.getTipoMoneda()) && !"USD".equals(cuentaDto.getTipoMoneda())) {
-            throw new IllegalArgumentException("El tipo de moneda no es correcto");
+            throw new TipoMonedaNoSoportadaException("El tipo de moneda no es correcto");
         }
     }
 }

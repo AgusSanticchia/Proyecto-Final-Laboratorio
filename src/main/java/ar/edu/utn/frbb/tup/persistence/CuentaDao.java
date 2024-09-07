@@ -27,6 +27,14 @@ public class CuentaDao extends AbstractBaseDao {
         return ((CuentaEntity) getInMemoryDatabase().get(id)).toCuenta();
     }
 
+    public void update(Cuenta cuenta) throws CuentaNotExistException {
+        CuentaEntity entity = (CuentaEntity) getInMemoryDatabase().get(cuenta.getNumeroCuenta());
+        if (entity == null) {
+            throw new CuentaNotExistException("Cuenta con id " + cuenta.getNumeroCuenta() + " no existe.");
+        }
+        entity.updateFromCuenta(cuenta);
+        getInMemoryDatabase().put(entity.getId(), entity);
+    }
 
     public List<Cuenta> getCuentasByCliente(long dni) {
         List<Cuenta> cuentasDelCliente = new ArrayList<>();

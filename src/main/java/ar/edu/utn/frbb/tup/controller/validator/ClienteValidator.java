@@ -24,7 +24,7 @@ public class ClienteValidator {
         LocalDate fechaActual = LocalDate.now();
         int edad = Period.between(fechaNacimiento, fechaActual).getYears();
         if (edad < 18) {
-            throw new DatosIncorrectosException("El cliente debe ser mayor de edad");
+            throw new MenorDeEdadException("El cliente debe ser mayor de edad");
         }
     }
     public void validateTipoPersona(ClienteDto clienteDto) throws DatosIncorrectosException {

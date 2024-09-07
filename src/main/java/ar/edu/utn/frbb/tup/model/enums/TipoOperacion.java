@@ -24,5 +24,4 @@ public enum TipoOperacion {
         }
         throw new IllegalArgumentException("No se pudo encontrar un TipoOperacion con la descripción: " + text);
     }
-
 }
