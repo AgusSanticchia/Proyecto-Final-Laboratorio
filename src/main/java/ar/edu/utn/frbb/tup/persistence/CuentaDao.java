@@ -36,6 +36,7 @@ public class CuentaDao extends AbstractBaseDao {
         getInMemoryDatabase().put(entity.getId(), entity);
     }
 
+
     public List<Cuenta> getCuentasByCliente(long dni) {
         List<Cuenta> cuentasDelCliente = new ArrayList<>();
         for (Object object : getInMemoryDatabase().values()) {

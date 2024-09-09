@@ -4,6 +4,8 @@ import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.model.exception.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.model.exception.TipoCuentaNoSoportadaException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,22 +17,19 @@ public class MovimientosValidator {
     }
     validateMonto(movimientosDto.getMonto());
     validateTipoMoneda(movimientosDto.getTipoMoneda());
-    validateNumeroCuenta(movimientosDto.getNumeroCuenta());
   }
 
   public void validateMovimientosTransferencias(MovimientosTransferenciasDto movimientosTransferenciasDto)
-          throws DatosIncorrectosException {
+          throws TipoCuentaNoSoportadaException, DatosIncorrectosException {
     if (movimientosTransferenciasDto == null) {
       throw new DatosIncorrectosException("La transferencia no puede ser nula");
     }
 
     validateMonto(movimientosTransferenciasDto.getMonto());
     validateTipoMoneda(movimientosTransferenciasDto.getTipoMoneda());
-    validateNumeroCuenta(movimientosTransferenciasDto.getNumeroCuentaOrigen());
-    validateNumeroCuenta(movimientosTransferenciasDto.getNumeroCuentaDestino());
 
     if (movimientosTransferenciasDto.getNumeroCuentaOrigen() == movimientosTransferenciasDto.getNumeroCuentaDestino()) {
-      throw new DatosIncorrectosException("La cuenta origen y destino no pueden ser la misma");
+      throw new TipoCuentaNoSoportadaException("La cuenta origen y destino no pueden ser la misma");
     }
   }
 
@@ -40,20 +39,15 @@ public class MovimientosValidator {
     }
   }
 
-  private void validateTipoMoneda(String tipoMoneda) throws DatosIncorrectosException {
+  private void validateTipoMoneda(String tipoMoneda) throws MonedasIncompatiblesException, DatosIncorrectosException {
     if (tipoMoneda == null || tipoMoneda.trim().isEmpty()) {
       throw new DatosIncorrectosException("El tipo de moneda no puede ser nulo o vacío");
     }
     try {
       TipoMoneda.fromString(tipoMoneda.toUpperCase());
     } catch (IllegalArgumentException e) {
-      throw new DatosIncorrectosException("Tipo de moneda no válido: " + tipoMoneda);
+      throw new MonedasIncompatiblesException("Tipo de moneda no válido: " + tipoMoneda);
     }
   }
 
-  private void validateNumeroCuenta(long numeroCuenta) throws DatosIncorrectosException {
-    if (numeroCuenta <= 0) {
-      throw new DatosIncorrectosException("El número de cuenta debe ser positivo");
-    }
-  }
 }

@@ -4,6 +4,8 @@ import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.exception.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.model.exception.TipoMonedaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.TipoPersonaNoSoportadaException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,7 +21,7 @@ public class ClienteValidator {
         validateEdad(clienteDto);
     }
 
-    private void validateEdad(ClienteDto clienteDto) throws DatosIncorrectosException, MenorDeEdadException {
+    private void validateEdad(ClienteDto clienteDto) throws MenorDeEdadException {
         LocalDate fechaNacimiento = LocalDate.parse(clienteDto.getFechaNacimiento());
         LocalDate fechaActual = LocalDate.now();
         int edad = Period.between(fechaNacimiento, fechaActual).getYears();
@@ -27,11 +29,11 @@ public class ClienteValidator {
             throw new MenorDeEdadException("El cliente debe ser mayor de edad");
         }
     }
-    public void validateTipoPersona(ClienteDto clienteDto) throws DatosIncorrectosException {
+    public void validateTipoPersona(ClienteDto clienteDto) throws TipoPersonaNoSoportadaException {
         try {
             TipoPersona.fromString(clienteDto.getTipoPersona());
         } catch (IllegalArgumentException ex) {
-            throw new DatosIncorrectosException("El tipo de persona no es correcto. Debe ser 'F' o 'J'.");
+            throw new TipoMonedaNoSoportadaException("El tipo de persona no es correcto. Debe ser 'F' o 'J'.");
         }
     }
 

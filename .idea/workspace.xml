@@ -5,38 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e17cdaa3-2de7-4068-ad88-66f125412fd9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/CuentaNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/CuentaPermitidaException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/MonedasIncompatiblesException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/TipoMonedaNoSoportadaException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/TransferenciaRechazadaException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EJEMPLOS_POSTMAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/EJEMPLOS_POSTMAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/validator/ClienteValidatorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/validator/CuentaValidatorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/validator/MovimientosValidatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/MovimientosController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/MovimientosController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/dto/BanelcoDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/dto/MovimientosDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/dto/MovimientosDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/handler/TupResponseEntityExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/handler/TupResponseEntityExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/validator/ClienteValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/validator/ClienteValidator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/validator/CuentaValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/validator/CuentaValidator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/validator/MovimientosValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/controller/validator/MovimientosValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/Cliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/Cuenta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/Cuenta.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/Movimientos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/Movimientos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/enums/TipoOperacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/enums/TipoOperacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/ClienteCannotBeEditException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/CuentaNoPermitaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/CuentaNoPermitidaException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/CantidadNegativaException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/ClienteCannotBeDeleteException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/model/exception/MonedaDistintaException.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/persistence/CuentaDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/persistence/CuentaDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/persistence/entity/CuentaEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/persistence/entity/CuentaEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/persistence/entity/ClienteEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/persistence/entity/ClienteEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/service/BanelcoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/service/BanelcoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/service/MovimientosService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/edu/utn/frbb/tup/service/MovimientosService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/BanelcoServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/ClienteServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/ClienteServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/CuentaServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/CuentaServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/MovimientosServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/MovimientosServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/Application.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/ApplicationConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/ApplicationConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/ClienteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/ClienteController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/CuentaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/CuentaController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/MovimientosController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/MovimientosController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/BanelcoDto.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/ClienteDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/ClienteDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/CuentaDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/CuentaDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/MovimientosDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/controller/dto/MovimientosDto.class" afterDir="false" />
@@ -55,21 +51,25 @@
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/enums/TipoMoneda.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/enums/TipoMoneda.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/enums/TipoOperacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/enums/TipoOperacion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/enums/TipoPersona.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/enums/TipoPersona.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CantidadNegativaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CantidadNegativaException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CantidadNegativaException.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteAlreadyExistsException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteAlreadyExistsException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteCannotBeDeleteException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteCannotBeDeleteException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteCannotBeEditException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteCannotBeDeleteException.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteNotFoundException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/ClienteNotFoundException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaAlreadyExistsException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaAlreadyExistsException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaNoPermitidaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaNoPermitidaException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaNotExistException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaNotExistException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaNotFoundException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaNotFoundException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaPermitidaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/CuentaPermitidaException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/DatosIncorrectosException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/DatosIncorrectosException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/FondosInsuficientesException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/FondosInsuficientesException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MenorDeEdadException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MenorDeEdadException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MonedaDistintaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MonedaDistintaException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MonedaDistintaException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MonedasIncompatiblesException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/MonedasIncompatiblesException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoCuentaAlreadyExistsException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoCuentaAlreadyExistsException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoCuentaNoSoportadaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoCuentaNoSoportadaException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoMonedaNoCoincidenException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoMonedaNoCoincidenException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoMonedaNoSoportadaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TipoMonedaNoSoportadaException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TransferenciaRechazadaException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/model/exception/TransferenciaRechazadaException.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/persistence/AbstractBaseDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/persistence/AbstractBaseDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/persistence/ClienteDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/persistence/ClienteDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/persistence/CuentaDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/persistence/CuentaDao.class" afterDir="false" />
@@ -80,9 +80,10 @@
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/service/ClienteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/service/ClienteService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/service/CuentaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/service/CuentaService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/service/MovimientosService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/edu/utn/frbb/tup/service/MovimientosService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/BanelcoServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/BanelcoServiceTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/BanelcoServiceTest.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/ClienteServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/ClienteServiceTest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/CuentaServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/CuentaServiceTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/MovimientosServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/ar/edu/utn/frbb/tup/service/MovimientosServiceTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +94,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -123,18 +125,40 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Application.executor": "Run",
+    "JUnit.ClienteServiceTest.executor": "Run",
+    "JUnit.ClienteValidatorTest.executor": "Run",
+    "JUnit.CuentaServiceTest.darDeAltaCuenta_ClienteServiceThrowsException.executor": "Run",
+    "JUnit.CuentaServiceTest.darDeAltaCuenta_DtoWithValidValues.executor": "Debug",
+    "JUnit.CuentaServiceTest.darDeAltaCuenta_Success.executor": "Run",
+    "JUnit.CuentaServiceTest.executor": "Run",
+    "JUnit.CuentaValidatorTest.executor": "Run",
+    "JUnit.CuentaValidatorTest.testValidateMonedasIncompatibles.executor": "Run",
+    "JUnit.CuentaValidatorTest.testValidateMonedasIncompatibles_ExceptionThrown.executor": "Run",
+    "JUnit.CuentaValidatorTest.testValidateTipoCuenta.executor": "Run",
+    "JUnit.CuentaValidatorTest.testValidateTipoMoneda.executor": "Run",
+    "JUnit.MovimientosServiceTest.depositarExitosoDolaresTest.executor": "Run",
+    "JUnit.MovimientosServiceTest.depositarExitosoPesosConGranMontoTest.executor": "Run",
+    "JUnit.MovimientosServiceTest.depositarExitosoTest.executor": "Run",
     "JUnit.MovimientosServiceTest.executor": "Run",
+    "JUnit.MovimientosServiceTest.retirarExitosoTest.executor": "Run",
     "JUnit.MovimientosServiceTest.testDepositarCuentaNoEncontrada.executor": "Run",
     "JUnit.MovimientosServiceTest.testDepositarMonedasIncompatibles.executor": "Run",
     "JUnit.MovimientosServiceTest.testRetirarCuentaNoEncontrada.executor": "Run",
     "JUnit.MovimientosServiceTest.testRetirarFondosInsuficientes.executor": "Run",
+    "JUnit.MovimientosServiceTest.testRetirarMonedaIncorrecta.executor": "Run",
+    "JUnit.MovimientosServiceTest.testRetiroMontoNegativo.executor": "Run",
+    "JUnit.MovimientosServiceTest.testTransferenciaExternaError.executor": "Run",
+    "JUnit.MovimientosServiceTest.testTransferirConComisionPesos.executor": "Debug",
     "JUnit.MovimientosServiceTest.testTransferirExitoso.executor": "Debug",
     "JUnit.MovimientosServiceTest.testTransferirExitosoConBanelco.executor": "Run",
+    "JUnit.MovimientosServiceTest.testTransferirFallaConBanelco.executor": "Run",
     "JUnit.MovimientosServiceTest.testTransferirFondosInsuficientes.executor": "Run",
     "JUnit.MovimientosServiceTest.testTransferir_Exitoso.executor": "Run",
     "JUnit.MovimientosServiceTest.transferirExitosoTest.executor": "Run",
     "JUnit.MovimientosServiceTest.transferirFondosInsuficientesTest.executor": "Run",
     "JUnit.MovimientosServiceTest.transferirMonedasIncompatiblesTest.executor": "Run",
+    "JUnit.MovimientosValidatorTest (1).executor": "Run",
+    "JUnit.MovimientosValidatorTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "com.codeium.enabled": "true",
     "git-widget-placeholder": "main",
@@ -142,24 +166,11 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "settings.editor.selected.configurable": "com.codeium.AppSettingsConfigurable"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Application">
-    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.Application" />
-      <module name="tup2024" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ar.edu.utn.frbb.tup.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MovimientosServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.CuentaValidatorTest">
+    <configuration name="ClienteServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="tup2024" />
       <extension name="coverage">
         <pattern>
@@ -168,55 +179,69 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.service" />
-      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.service.MovimientosServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.service.ClienteServiceTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MovimientosServiceTest.testTransferirExitoso" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ClienteValidatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="tup2024" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ar.edu.utn.frbb.tup.service.*" />
+          <option name="PATTERN" value="ar.edu.utn.frbb.tup.validator.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.service" />
-      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.service.MovimientosServiceTest" />
-      <option name="METHOD_NAME" value="testTransferirExitoso" />
+      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.validator" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.validator.ClienteValidatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CuentaValidatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tup2024" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.utn.frbb.tup.validator.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.validator" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.validator.CuentaValidatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CuentaValidatorTest.testValidateTipoCuenta" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tup2024" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.edu.utn.frbb.tup.validator.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.validator" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.validator.CuentaValidatorTest" />
+      <option name="METHOD_NAME" value="testValidateTipoCuenta" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MovimientosServiceTest.testTransferirExitosoConBanelco" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CuentaValidatorTest.testValidateTipoMoneda" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="tup2024" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ar.edu.utn.frbb.tup.service.*" />
+          <option name="PATTERN" value="ar.edu.utn.frbb.tup.validator.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.service" />
-      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.service.MovimientosServiceTest" />
-      <option name="METHOD_NAME" value="testTransferirExitosoConBanelco" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MovimientosServiceTest.transferirMonedasIncompatiblesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="tup2024" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ar.edu.utn.frbb.tup.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.service" />
-      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.service.MovimientosServiceTest" />
-      <option name="METHOD_NAME" value="transferirMonedasIncompatiblesTest" />
+      <option name="PACKAGE_NAME" value="ar.edu.utn.frbb.tup.validator" />
+      <option name="MAIN_CLASS_NAME" value="ar.edu.utn.frbb.tup.validator.CuentaValidatorTest" />
+      <option name="METHOD_NAME" value="testValidateTipoMoneda" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -237,11 +262,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Application" />
-        <item itemvalue="JUnit.MovimientosServiceTest.testTransferirExitosoConBanelco" />
-        <item itemvalue="JUnit.MovimientosServiceTest" />
-        <item itemvalue="JUnit.MovimientosServiceTest.testTransferirExitoso" />
-        <item itemvalue="JUnit.MovimientosServiceTest.transferirMonedasIncompatiblesTest" />
+        <item itemvalue="JUnit.CuentaValidatorTest" />
+        <item itemvalue="JUnit.CuentaValidatorTest.testValidateTipoCuenta" />
+        <item itemvalue="JUnit.CuentaValidatorTest.testValidateTipoMoneda" />
+        <item itemvalue="JUnit.ClienteValidatorTest" />
+        <item itemvalue="JUnit.ClienteServiceTest" />
       </list>
     </recent_temporary>
   </component>
@@ -268,6 +293,20 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/ar/edu/utn/frbb/tup/service/CuentaServiceTest.java</url>
+          <line>74</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="ar.edu.utn.frbb.tup.controller.dto.CuentaDto" memberName="cbu" />
+      </pinned-members>
+    </pin-to-top-manager>
     <watches-manager>
       <configuration name="JUnit">
         <watch expression="movimientosTransferenciasDto.tipoMoneda.hashIsZero" language="JAVA" />

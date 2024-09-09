@@ -31,6 +31,7 @@ public class ClienteEntity extends BaseEntity {
         this.telefono = cliente.getTelefono();
         this.cuentas = new ArrayList<>();
         this.direccion = cliente.getDireccion();
+
         if (cliente.getCuentas() != null && !cliente.getCuentas().isEmpty()) {
             cuentas.addAll(cliente.getCuentas());
         }

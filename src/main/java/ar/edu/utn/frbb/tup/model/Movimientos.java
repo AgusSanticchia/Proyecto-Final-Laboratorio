@@ -2,27 +2,32 @@ package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
+import ar.edu.utn.frbb.tup.model.enums.TipoOperacion;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Movimientos {
     private double monto;
     private long cuentaOrigen;
     private long cuentaDestino;
     private String tipoMoneda;
-    private String tipoMovimiento;
+    TipoOperacion tipoOperacion;
+    private LocalDateTime fecha;
 
-    public Movimientos(MovimientosDto movimientosDto) {
+    public Movimientos(MovimientosDto movimientosDto){
+        this.fecha = LocalDateTime.now();
         this.monto = movimientosDto.getMonto();
-        this.cuentaOrigen = movimientosDto.getNumeroCuenta();
         this.tipoMoneda = movimientosDto.getTipoMoneda();
-        this.tipoMovimiento = "DEPOSITO/RETIRO";
+        this.cuentaOrigen = movimientosDto.getNumeroCuenta();
     }
 
-    public Movimientos(MovimientosTransferenciasDto transferenciaDto) {
-        this.monto = transferenciaDto.getMonto();
-        this.cuentaOrigen = transferenciaDto.getNumeroCuentaOrigen();
-        this.cuentaDestino = transferenciaDto.getNumeroCuentaDestino();
-        this.tipoMoneda = transferenciaDto.getTipoMoneda();
-        this.tipoMovimiento = "TRANSFERENCIA";
+    public Movimientos(MovimientosTransferenciasDto movimientosTransferenciasDto) {
+        this.cuentaDestino = movimientosTransferenciasDto.getNumeroCuentaOrigen();
+        this.cuentaOrigen = movimientosTransferenciasDto.getNumeroCuentaDestino();
+        this.fecha = LocalDateTime.now();
+        this.monto = movimientosTransferenciasDto.getMonto();
+        this.tipoMoneda = movimientosTransferenciasDto.getTipoMoneda();
     }
 
     public double getMonto() {
@@ -57,11 +62,38 @@ public class Movimientos {
         this.tipoMoneda = tipoMoneda;
     }
 
-    public String getTipoMovimiento() {
-        return tipoMovimiento;
+
+    public TipoOperacion getTipoOperacion() {
+        return tipoOperacion;
     }
 
-    public void setTipoMovimiento(String tipoMovimiento) {
-        this.tipoMovimiento = tipoMovimiento;
+    public void setTipoOperacion(TipoOperacion tipoOperacion) {
+        this.tipoOperacion = tipoOperacion;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    @Override
+    public String toString() {
+        return "\n Tipo de Operacion: " + getTipoOperacion() + "\n Monto: " + getMonto();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movimientos that = (Movimientos) o;
+        return Objects.equals(tipoMoneda, that.tipoMoneda);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(tipoMoneda);
     }
 }

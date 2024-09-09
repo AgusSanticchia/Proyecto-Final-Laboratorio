@@ -48,7 +48,7 @@ public class ClienteServiceTest {
                 "Pepe",
                 12345678,
                 fechaNacimiento.format(formatter),
-                "123 Main St",
+                "Calle Falsa 123",
                 "1234567890",
                 "Provincia",
                 "F"
@@ -117,7 +117,7 @@ public class ClienteServiceTest {
                 "Santi",
                 12345678,
                 LocalDate.now().minusYears(17).format(formatter),
-                "123 Main St",
+                "Calle False 123",
                 "1234567890",
                 "Provincia",
                 "J"
@@ -196,7 +196,7 @@ public class ClienteServiceTest {
                 "Santi",
                 12345678,
                 LocalDate.now().minusYears(30).format(formatter),
-                "123 Main St",
+                "Calle falsa 123",
                 "1234567890",
                 "Provincia",
                 "J"

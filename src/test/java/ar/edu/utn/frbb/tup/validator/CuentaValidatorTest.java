@@ -1,47 +1,53 @@
-package ar.edu.utn.frbb.tup.controller.validator;
+package ar.edu.utn.frbb.tup.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.exception.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaNoSoportadaException;
 import ar.edu.utn.frbb.tup.model.exception.TipoMonedaNoSoportadaException;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CuentaValidatorTest {
 
+    // Crear una instancia del validador para usar en las pruebas
     private final CuentaValidator cuentaValidator = new CuentaValidator();
 
     @Test
-    public void testValidateCuenta_ValidInput_NoExceptionThrown() throws TipoCuentaNoSoportadaException {
+    public void testValidateCuenta() {
+        // Crear un objeto CuentaDto con datos válidos
         CuentaDto cuentaDto = new CuentaDto(12345678L, "CC$", "ARS");
-        cuentaValidator.validateCuenta(cuentaDto);
-        // No exceptions should be thrown
+        // Verificar que no se lanzan excepciones para entradas válidas
+        try {
+            cuentaValidator.validateCuenta(cuentaDto);
+        } catch (TipoCuentaNoSoportadaException | TipoMonedaNoSoportadaException | MonedasIncompatiblesException e) {
+            // Si se lanza una excepción, la prueba falla
+            throw new AssertionError("No debería haberse lanzado ninguna excepción", e);
+        }
     }
 
     @Test
-    public void testValidateTipoCuenta_InvalidType_ExceptionThrown() {
+    public void testValidateMonedasIncompatibles() {
+        // Crear un objeto CuentaDto con moneda incompatible para el tipo de cuenta
+        CuentaDto cuentaDto = new CuentaDto(12345678L, "CC$", "USD");
+        // Verificar que se lanza una excepción de monedas incompatibles
+        assertThrows(MonedasIncompatiblesException.class, () -> cuentaValidator.validateCuenta(cuentaDto));
+    }
+
+    @Test
+    public void testValidateTipoCuentaInvalida() {
+        // Crear un objeto CuentaDto con un tipo de cuenta no soportado
         CuentaDto cuentaDto = new CuentaDto(12345678L, "CAU$S", "ARS");
-        assertThrows(TipoCuentaNoSoportadaException.class, () -> {
-            cuentaValidator.validateCuenta(cuentaDto);
-        });
+        // Verificar que se lanza una excepción de monedas incompatibles
+        assertThrows(MonedasIncompatiblesException.class, () -> cuentaValidator.validateCuenta(cuentaDto));
     }
 
     @Test
-    public void testValidateTipoMoneda_InvalidCurrency_ExceptionThrown() {
-        CuentaDto cuentaDto = new CuentaDto(12345678L, "CC$", "ARS");
-        assertThrows(TipoMonedaNoSoportadaException.class, () -> {
-            cuentaValidator.validateCuenta(cuentaDto);
-        });
-    }
-
-    @Test
-    public void testValidateMonedasIncompatibles_ExceptionThrown() {
-        // En tu código actual no hay manejo explícito para monedas incompatibles,
-        // así que este test es solo un ejemplo si lo necesitas en el futuro.
-        CuentaDto cuentaDto = new CuentaDto(12345678L, "CC$", "ARS");
-        // Cambia esto cuando manejes incompatibilidad de monedas si es necesario.
-        assertThrows(MonedasIncompatiblesException.class, () -> {
-            cuentaValidator.validateCuenta(cuentaDto);
-        });
+    public void testValidateTipoMoneda() {
+        // Crear un objeto CuentaDto con una moneda no soportada
+        CuentaDto cuentaDto = new CuentaDto(12345678L, "CC$", "EURO");
+        // Verificar que se lanza una excepción de tipo de moneda no soportada
+        assertThrows(TipoMonedaNoSoportadaException.class, () -> cuentaValidator.validateCuenta(cuentaDto));
     }
 }

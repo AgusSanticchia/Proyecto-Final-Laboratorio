@@ -9,7 +9,7 @@ public class BanelcoService {
 
     private final Random random = new Random();
 
-    public boolean realizarTransferenciaBanelco(long numeroCuentaOrigen, long numeroCuentaDestino, double monto, String tipoMoneda) {
+    public boolean realizarTransferenciaBanelco(long numeroCuentaOrigen, long numeroCuentaDestino, double monto) {
         return random.nextDouble() < 0.75;
     }
 }
