@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.service;
 
-import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
@@ -29,28 +28,16 @@ public class MovimientosService {
             throw new CuentaNotFoundException("Cuenta no encontrada");
         }
 
-        if (deposito.getMonto() < 0) {
-            throw new IllegalArgumentException("El monto no puede ser negativo");
-        }
-
         TipoMoneda tipoMonedaDeposito = TipoMoneda.fromString(deposito.getTipoMoneda());
         if (!cuenta.getTipoMoneda().equals(tipoMonedaDeposito)) {
             throw new MonedasIncompatiblesException("Moneda incompatible");
         }
 
         cuenta.setBalance(cuenta.getBalance() + deposito.getMonto());
-
-        // Crear el objeto Movimientos con el tipo de operación DEPOSITO
-        Movimientos movimientos = new Movimientos(deposito);
-        movimientos.setTipoOperacion(TipoOperacion.DEPOSITO);
-        cuenta.addMovimiento(movimientos);
-
         cuentaDao.update(cuenta);
 
-        // Devolver el mismo objeto Movimientos que ya tiene el tipo de operación DEPOSITO asignado
-        return movimientos;
+        return new Movimientos(deposito);
     }
-
 
     public Movimientos retirar(MovimientosDto retiro)
             throws FondosInsuficientesException, CuentaNotFoundException, MonedasIncompatiblesException {
@@ -70,32 +57,85 @@ public class MovimientosService {
         }
 
         cuenta.setBalance(cuenta.getBalance() - retiro.getMonto());
-
-        Movimientos movimientos = new Movimientos(retiro);
-        movimientos.setTipoOperacion(TipoOperacion.RETIRO);
-        cuenta.addMovimiento(movimientos);
-
         cuentaDao.update(cuenta);
 
-        return movimientos;
+        return new Movimientos(retiro);
     }
 
-    public void transferir(MovimientosTransferenciasDto transferencia)
-            throws FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotFoundException {
 
+    public void transferir(MovimientosTransferenciasDto transferencia) throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException {
         Cuenta cuentaOrigen = cuentaDao.find(transferencia.getNumeroCuentaOrigen());
         Cuenta cuentaDestino = cuentaDao.find(transferencia.getNumeroCuentaDestino());
 
-        if (cuentaOrigen == null) {
-            throw new CuentaNotFoundException("Cuenta origen no encontrada");
+        if (cuentaOrigen != null) {
+            Movimientos movimiento = new Movimientos(transferencia);
+
+            if (cuentaOrigen.getTipoMoneda().equals(movimiento.getTipoMoneda())) {  // Validamos que el tipo de moneda que se introduce en el JSON sea el mismo que la cuenta
+
+                if (cuentaDestino != null) { // Si la cuenta destino no existe en nuestro banco "Utilizamos" el servicio Banelco
+
+                    if (cuentaOrigen.getBalance() >= transferencia.getMonto()) {  // Claramente el balance de la cuenta tiene que ser mayor al monto a transferir
+
+                        if (cuentaOrigen.getTipoMoneda().equals(cuentaDestino.getTipoMoneda())) { // Si el tipo de moneda de la cuenta origen coincide con el tipo de moneda de la cuentaDestino
+
+                            cuentaOrigen.setBalance(cuentaOrigen.getBalance() - transferencia.getMonto());
+                            cuentaDestino.setBalance(cuentaDestino.getBalance() + transferencia.getMonto());
+
+
+                            MovimientosTransferenciasDto movimientoOrigen = new MovimientosTransferenciasDto(transferencia);
+                            MovimientosTransferenciasDto movimientoDestino = new MovimientosTransferenciasDto(transferencia);
+
+                            movimientoOrigen.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
+                            movimientoDestino.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
+
+                            cuentaOrigen.addMovimiento(movimientoOrigen);
+                            cuentaDestino.addMovimiento(movimientoDestino);
+
+                            cuentaDao.save(cuentaOrigen);
+                            cuentaDao.save(cuentaDestino);
+
+                        } else {
+                            throw new MonedasIncompatiblesException("Las monedas entre cuentas debe ser la misma");
+                        }
+                    } else {
+                        throw new FondosInsuficientesException("El monto supera al dinero disponible en la cuenta");
+                    }
+
+                } else {
+                    // Invocacion al servicio balenco
+                    banelcoExternal(transferencia, cuentaOrigen);
+                }
+            } else {
+                throw new MonedasIncompatiblesException("Son diferentes monedas");
+            }
+        } else {
+            throw new CuentaNotFoundException("La cuenta de origen no existe");
         }
 
-        // Verificar si la cuenta destino es externa (nula) o del mismo banco
-        if (cuentaDestino != null) {
-            // Verificar que ambas cuentas tengan la misma moneda
-            if (!cuentaOrigen.getTipoMoneda().equals(cuentaDestino.getTipoMoneda())) {
-                throw new MonedasIncompatiblesException("Moneda incompatible entre la cuenta origen y destino");
+
+        private double calcularComision (MovimientosTransferenciasDto transferencia, TipoMoneda tipoMoneda){
+            double monto = transferencia.getMonto();
+            double comision = 0;
+
+            // Aplicar comisión según la moneda y monto de transferencia
+            switch (tipoMoneda) {
+                case PESOS -> {
+                    if (monto > 1000000) {
+                        comision = monto * 0.02; // 2% de comisión si supera $1,000,000
+                    }
+                }
+                case DOLARES -> {
+                    if (monto > 5000) {
+                        comision = monto * 0.005; // 0.5% de comisión si supera U$S 5,000
+                    }
+                }
             }
+
+            return comision;
+        }
+
+        public void banelcoExternal (MovimientosTransferenciasDto transferencia, Cuenta cuentaOrigen)
+            throws CuentaNotFoundException, FondosInsuficientesException {
 
             // Verificar que la cuenta origen tenga fondos suficientes
             double comision = calcularComision(transferencia, cuentaOrigen.getTipoMoneda());
@@ -105,80 +145,26 @@ public class MovimientosService {
                 throw new FondosInsuficientesException("Fondos insuficientes para realizar la transferencia");
             }
 
-            // Actualizar los saldos de ambas cuentas
-            cuentaOrigen.setBalance(cuentaOrigen.getBalance() - montoTotal);
-            cuentaDestino.setBalance(cuentaDestino.getBalance() + transferencia.getMonto());
+            // Llamar al servicio externo para realizar la transferencia
+            boolean transferenciaExitosa = banelcoService.realizarTransferenciaBanelco(
+                    transferencia.getNumeroCuentaOrigen(),
+                    transferencia.getNumeroCuentaDestino(),
+                    transferencia.getMonto()
+            );
 
-            // Registrar movimientos
-            Movimientos movimientoCuentaOrigen = new Movimientos(transferencia);
-            Movimientos movimientoCuentaDestino = new Movimientos(transferencia);
-            movimientoCuentaOrigen.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
-            movimientoCuentaDestino.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
+            if (transferenciaExitosa) {
+                // Actualizar el saldo de la cuenta origen y registrar el movimiento
+                cuentaOrigen.setBalance(cuentaOrigen.getBalance() - montoTotal);
 
-            cuentaOrigen.addMovimiento(movimientoCuentaOrigen);
-            cuentaDestino.addMovimiento(movimientoCuentaDestino);
+                Movimientos movimiento = new Movimientos(transferencia);
+                movimiento.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
+                cuentaOrigen.addMovimiento(movimiento);
 
-            // Guardar actualizaciones en la base de datos
-            cuentaDao.update(cuentaOrigen);
-            cuentaDao.update(cuentaDestino);
-
-        } else {
-            // Si la cuenta destino es externa, se hace a través de Banelco
-            banelcoExternal(transferencia, cuentaOrigen);
-        }
-    }
-
-    private double calcularComision(MovimientosTransferenciasDto transferencia, TipoMoneda tipoMoneda) {
-        double monto = transferencia.getMonto();
-        double comision = 0;
-
-        // Aplicar comisión según la moneda y monto de transferencia
-        switch (tipoMoneda) {
-            case PESOS -> {
-                if (monto > 1000000) {
-                    comision = monto * 0.02; // 2% de comisión si supera $1,000,000
-                }
+                // Guardar las actualizaciones en la base de datos
+                cuentaDao.update(cuentaOrigen);
+            } else {
+                throw new CuentaNotFoundException("Transferencia fallida: cuenta destino no encontrada");
             }
-            case DOLARES -> {
-                if (monto > 5000) {
-                    comision = monto * 0.005; // 0.5% de comisión si supera U$S 5,000
-                }
-            }
-        }
-
-        return comision;
-    }
-
-    public void banelcoExternal(MovimientosTransferenciasDto transferencia, Cuenta cuentaOrigen)
-            throws CuentaNotFoundException, FondosInsuficientesException {
-
-        // Verificar que la cuenta origen tenga fondos suficientes
-        double comision = calcularComision(transferencia, cuentaOrigen.getTipoMoneda());
-        double montoTotal = transferencia.getMonto() + comision;
-
-        if (cuentaOrigen.getBalance() < montoTotal) {
-            throw new FondosInsuficientesException("Fondos insuficientes para realizar la transferencia");
-        }
-
-        // Llamar al servicio externo para realizar la transferencia
-        boolean transferenciaExitosa = banelcoService.realizarTransferenciaBanelco(
-                transferencia.getNumeroCuentaOrigen(),
-                transferencia.getNumeroCuentaDestino(),
-                transferencia.getMonto()
-        );
-
-        if (transferenciaExitosa) {
-            // Actualizar el saldo de la cuenta origen y registrar el movimiento
-            cuentaOrigen.setBalance(cuentaOrigen.getBalance() - montoTotal);
-
-            Movimientos movimiento = new Movimientos(transferencia);
-            movimiento.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
-            cuentaOrigen.addMovimiento(movimiento);
-
-            // Guardar las actualizaciones en la base de datos
-            cuentaDao.update(cuentaOrigen);
-        } else {
-            throw new CuentaNotFoundException("Transferencia fallida: cuenta destino no encontrada");
         }
     }
 }

@@ -9,7 +9,7 @@ import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 @Component
 public class CuentaValidator {
 
-    public void validateCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException {
+    public void validateCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException, Exception {
         validateTipoCuenta(cuentaDto);
         validateMoneda(cuentaDto);
         validateMonedasIncompatibles(cuentaDto);

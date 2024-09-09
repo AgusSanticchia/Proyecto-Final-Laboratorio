@@ -23,7 +23,7 @@ public class CuentaController {
     private CuentaValidator cuentaValidator;
 
     @PostMapping
-    public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteAlreadyExistsException {
+    public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteAlreadyExistsException, Exception {
         cuentaValidator.validateCuenta(cuentaDto);
         Cuenta cuenta = cuentaService.darDeAltaCuenta(cuentaDto);
         return new ResponseEntity<>(cuenta, HttpStatus.CREATED);

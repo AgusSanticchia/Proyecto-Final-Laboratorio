@@ -1,33 +1,34 @@
 package ar.edu.utn.frbb.tup.model;
 
-import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
-import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
-import ar.edu.utn.frbb.tup.model.enums.TipoOperacion;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
+import ar.edu.utn.frbb.tup.model.enums.TipoOperacion;
+import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
+import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 
 public class Movimientos {
     private double monto;
     private long cuentaOrigen;
     private long cuentaDestino;
-    private String tipoMoneda;
-    TipoOperacion tipoOperacion;
     private LocalDateTime fecha;
+    private TipoMoneda tipoMoneda;
+    private TipoOperacion tipoOperacion;
 
-    public Movimientos(MovimientosDto movimientosDto){
-        this.fecha = LocalDateTime.now();
+
+    public Movimientos(MovimientosDto movimientosDto) {
         this.monto = movimientosDto.getMonto();
-        this.tipoMoneda = movimientosDto.getTipoMoneda();
         this.cuentaOrigen = movimientosDto.getNumeroCuenta();
+        this.tipoMoneda = TipoMoneda.fromString(movimientosDto.getTipoMoneda());
     }
 
     public Movimientos(MovimientosTransferenciasDto movimientosTransferenciasDto) {
-        this.cuentaDestino = movimientosTransferenciasDto.getNumeroCuentaOrigen();
-        this.cuentaOrigen = movimientosTransferenciasDto.getNumeroCuentaDestino();
+        this.cuentaDestino = movimientosTransferenciasDto.getNumeroCuentaDestino();
+        this.cuentaOrigen = movimientosTransferenciasDto.getNumeroCuentaOrigen();
         this.fecha = LocalDateTime.now();
         this.monto = movimientosTransferenciasDto.getMonto();
-        this.tipoMoneda = movimientosTransferenciasDto.getTipoMoneda();
+        this.tipoMoneda = TipoMoneda.fromString(movimientosTransferenciasDto.getTipoMoneda());
     }
 
     public double getMonto() {
@@ -46,22 +47,9 @@ public class Movimientos {
         this.cuentaOrigen = cuentaOrigen;
     }
 
-    public long getCuentaDestino() {
-        return cuentaDestino;
-    }
-
-    public void setCuentaDestino(long cuentaDestino) {
-        this.cuentaDestino = cuentaDestino;
-    }
-
-    public String getTipoMoneda() {
+    public TipoMoneda getTipoMoneda() {
         return tipoMoneda;
     }
-
-    public void setTipoMoneda(String tipoMoneda) {
-        this.tipoMoneda = tipoMoneda;
-    }
-
 
     public TipoOperacion getTipoOperacion() {
         return tipoOperacion;
@@ -71,17 +59,13 @@ public class Movimientos {
         this.tipoOperacion = tipoOperacion;
     }
 
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
-
     @Override
     public String toString() {
-        return "\n Tipo de Operacion: " + getTipoOperacion() + "\n Monto: " + getMonto();
+        return "\n Tipo de Operacion: " + getTipoOperacion() + "\n Monto: " + getMonto() + "\n Fecha: " + getFecha();
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
     }
 
     @Override

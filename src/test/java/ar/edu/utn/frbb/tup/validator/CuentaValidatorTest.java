@@ -24,6 +24,8 @@ public class CuentaValidatorTest {
         } catch (TipoCuentaNoSoportadaException | TipoMonedaNoSoportadaException | MonedasIncompatiblesException e) {
             // Si se lanza una excepción, la prueba falla
             throw new AssertionError("No debería haberse lanzado ninguna excepción", e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

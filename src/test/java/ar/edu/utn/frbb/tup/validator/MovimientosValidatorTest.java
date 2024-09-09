@@ -57,13 +57,39 @@ public class MovimientosValidatorTest {
     }
 
     @Test
-    public void testValidateMovimientosExitoso() throws DatosIncorrectosException {
+    public void testValidateMovimientosExitoso_ValidAmountAndCurrency() throws DatosIncorrectosException {
         // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "ARS");
+        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "USD");
 
-        // Act & Assert
-        // No exception should be thrown
+        // Act
         validator.validateMovimientos(movimientosDto);
+
+        // Assert
+        // No exception should be thrown
+    }
+
+    @Test
+    public void testValidateMovimientosExitoso_ZeroAmountAndValidCurrency() throws DatosIncorrectosException, MonedasIncompatiblesException {
+        // Arrange
+        MovimientosDto movimientosDto = new MovimientosDto(0.0, 1L, "USD");
+
+        // Act
+        validator.validateMovimientos(movimientosDto);
+
+        // Assert
+        // No exception should be thrown
+    }
+
+    @Test
+    public void testValidateMovimientosExitoso_ValidCurrencyAndAccountNumber() throws DatosIncorrectosException {
+        // Arrange
+        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 123L, "ARS");
+
+        // Act
+        validator.validateMovimientos(movimientosDto);
+
+        // Assert
+        // No exception should be thrown
     }
 
     // Tests para validación de transferencias

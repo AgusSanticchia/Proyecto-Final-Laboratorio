@@ -5,10 +5,7 @@ import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.controller.validator.MovimientosValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.Movimientos;
-import ar.edu.utn.frbb.tup.model.exception.CuentaNotFoundException;
-import ar.edu.utn.frbb.tup.model.exception.FondosInsuficientesException;
-import ar.edu.utn.frbb.tup.model.exception.MonedasIncompatiblesException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.*;
 import ar.edu.utn.frbb.tup.service.CuentaService;
 import ar.edu.utn.frbb.tup.service.MovimientosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,49 +19,43 @@ import java.util.LinkedList;
 public class MovimientosController {
 
     @Autowired
+    CuentaService cuentaService;
+
+    @Autowired
     private MovimientosService movimientosService;
 
     @Autowired
     private MovimientosValidator movimientosValidator;
 
-    @Autowired
-    private CuentaService cuentaService;
-
-    @PostMapping("/transferencias")
-    public ResponseEntity<Movimientos> transferencias(@RequestBody MovimientosTransferenciasDto movimientosTransferenciasDto)
-            throws FondosInsuficientesException, TipoCuentaNoSoportadaException {
-
-        movimientosValidator.validateMovimientosTransferencias(movimientosTransferenciasDto);
-        movimientosService.transferir(movimientosTransferenciasDto);
-        Cuenta cuenta = cuentaService.findById(movimientosTransferenciasDto.getNumeroCuentaOrigen());
-        return ResponseEntity.ok(cuenta.getMovimientos().getLast());
+    @PostMapping("/transferencia")
+    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws CuentaNotFoundException, TipoMonedaNoSoportadaException, FondosInsuficientesException, MonedasIncompatiblesException, TipoCuentaNoSoportadaException {
+        movimientosValidator.validateMovimientosTransferencias(movimientosDto);
+        movimientosService.transferir(movimientosDto);
+        Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuentaDestino());
+        return cuenta.getMovimientos().getLast();
     }
 
-    @PutMapping("/depositos")
+    @PostMapping("/depositos")
     public ResponseEntity<Movimientos> depositos(@RequestBody MovimientosDto movimientosDto)
             throws CuentaNotFoundException, MonedasIncompatiblesException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
-        movimientosService.depositar(movimientosDto);
-        Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuenta());
-        return ResponseEntity.ok(cuenta.getMovimientos().getLast());
+        Movimientos deposito = movimientosService.depositar(movimientosDto);
+        return ResponseEntity.ok(deposito);
     }
 
-    @PutMapping("/retiros")
+    @PostMapping("/retiros")
     public ResponseEntity<Movimientos> retiros(@RequestBody MovimientosDto movimientosDto)
             throws FondosInsuficientesException, CuentaNotFoundException, MonedasIncompatiblesException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
-        movimientosService.retirar(movimientosDto);
-        Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuenta());
-        return ResponseEntity.ok(cuenta.getMovimientos().getLast());
+        Movimientos retiro = movimientosService.retirar(movimientosDto);
+        return ResponseEntity.ok(retiro);
     }
 
-
-
-    @GetMapping("/cuentaId")
-    public LinkedList<Movimientos> getMovimientos(@PathVariable Long cuentaId) {
-        Cuenta cuenta = cuentaService.findById(cuentaId);
+    @GetMapping("/{cuentaId}")
+    public LinkedList<Movimientos> obtenerMovimientos(@PathVariable long numeroCuenta) throws CuentaNotFoundException {
+        Cuenta cuenta = cuentaService.findById(numeroCuenta);
         return cuenta.getMovimientos();
     }
 }

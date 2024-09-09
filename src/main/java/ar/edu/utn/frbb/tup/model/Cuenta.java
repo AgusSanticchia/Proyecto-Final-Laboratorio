@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
@@ -20,10 +21,7 @@ public class Cuenta {
     private Double balance = 0d;
     LinkedList<Movimientos> movimientos;
 
-    public Cuenta(){
-        this.balance = getBalance();
-        this.fechaCreacion = LocalDateTime.now();
-    }
+    public Cuenta(){};
 
     public Cuenta(CuentaDto cuentaDto) {
         this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
@@ -33,18 +31,7 @@ public class Cuenta {
         this.movimientos = new LinkedList<>();
         this.numeroCuenta = numeroCuenta();
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
-        this.cbu = cuentaDto.getCbu() != null ? cuentaDto.getCbu() : generarCbu();
-    }
-
-    public Cuenta(long l, TipoMoneda tipoMoneda, double v) {
-        this.dniTitular = l;
-        this.balance = v;
         this.cbu = generarCbu();
-        this.movimientos = new LinkedList<>();
-        this.tipoCuenta = TipoCuenta.CAJA_AHORRO_PESOS;
-        this.tipoMoneda = tipoMoneda;
-        this.fechaCreacion = LocalDateTime.now();
-        this.numeroCuenta = numeroCuenta();
     }
 
     public TipoMoneda getTipoMoneda() {
@@ -119,7 +106,7 @@ public class Cuenta {
         this.movimientos = movimientos;
     }
 
-    public void addMovimiento(Movimientos movimiento) {
+    public void addMovimiento(MovimientosTransferenciasDto movimiento) {
         this.movimientos.add(movimiento);
     }
 

@@ -1,13 +1,17 @@
 package ar.edu.utn.frbb.tup.model.enums;
 
 public enum TipoMoneda {
-    PESOS("ARS"),
-    DOLARES("USD");
+    DOLARES("USD"),
+    PESOS("ARS");
 
     private final String descripcion;
 
     TipoMoneda(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
     }
 
     public static TipoMoneda fromString(String text) {
@@ -16,6 +20,6 @@ public enum TipoMoneda {
                 return tipo;
             }
         }
-        throw new IllegalArgumentException("No se pudo encontrar un TipoMoneda con la descripción: " + text);
+        throw new IllegalArgumentException("No se pudo encontrar un TipoMoneda con la descripcion: " + text);
     }
 }

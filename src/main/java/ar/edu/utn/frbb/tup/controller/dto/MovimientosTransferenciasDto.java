@@ -1,5 +1,7 @@
 package ar.edu.utn.frbb.tup.controller.dto;
 
+import ar.edu.utn.frbb.tup.model.enums.TipoOperacion;
+
 public class MovimientosTransferenciasDto {
     private Double monto;
     private long cuentaOrigen;
@@ -28,4 +30,5 @@ public class MovimientosTransferenciasDto {
     public String getTipoMoneda() {
         return tipoMoneda;
     }
+
 }

@@ -11,22 +11,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MovimientosValidator {
 
-  public void validateMovimientos(MovimientosDto movimientosDto) throws DatosIncorrectosException {
+  public void validateMovimientos(MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException {
     if (movimientosDto == null) {
       throw new DatosIncorrectosException("El movimiento no puede ser nulo");
     }
     validateMonto(movimientosDto.getMonto());
-    validateTipoMoneda(movimientosDto.getTipoMoneda());
+    validateTipoMoneda(TipoMoneda.fromString(movimientosDto.getTipoMoneda()));
   }
 
   public void validateMovimientosTransferencias(MovimientosTransferenciasDto movimientosTransferenciasDto)
-          throws TipoCuentaNoSoportadaException, DatosIncorrectosException {
+          throws TipoCuentaNoSoportadaException, DatosIncorrectosException, MonedasIncompatiblesException {
     if (movimientosTransferenciasDto == null) {
       throw new DatosIncorrectosException("La transferencia no puede ser nula");
     }
 
     validateMonto(movimientosTransferenciasDto.getMonto());
-    validateTipoMoneda(movimientosTransferenciasDto.getTipoMoneda());
+    validateTipoMoneda(TipoMoneda.fromString(movimientosTransferenciasDto.getTipoMoneda()));
 
     if (movimientosTransferenciasDto.getNumeroCuentaOrigen() == movimientosTransferenciasDto.getNumeroCuentaDestino()) {
       throw new TipoCuentaNoSoportadaException("La cuenta origen y destino no pueden ser la misma");
@@ -39,15 +39,9 @@ public class MovimientosValidator {
     }
   }
 
-  private void validateTipoMoneda(String tipoMoneda) throws MonedasIncompatiblesException, DatosIncorrectosException {
-    if (tipoMoneda == null || tipoMoneda.trim().isEmpty()) {
-      throw new DatosIncorrectosException("El tipo de moneda no puede ser nulo o vacío");
-    }
-    try {
-      TipoMoneda.fromString(tipoMoneda.toUpperCase());
-    } catch (IllegalArgumentException e) {
-      throw new MonedasIncompatiblesException("Tipo de moneda no válido: " + tipoMoneda);
+  private void validateTipoMoneda(TipoMoneda tipoMoneda) throws MonedasIncompatiblesException {
+    if (tipoMoneda == null) {
+      throw new MonedasIncompatiblesException("El tipo de moneda no puede ser nulo");
     }
   }
-
 }
