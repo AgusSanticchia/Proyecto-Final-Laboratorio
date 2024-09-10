@@ -32,8 +32,11 @@ public class MovimientosController {
             throws CuentaNotFoundException, TipoCuentaNoSoportadaException, MonedasIncompatiblesException, FondosInsuficientesException, DatosIncorrectosException, CuentaNotExistException {
 
         movimientosValidator.validateMovimientosTransferencias(movimientosDto);
+        System.out.println(movimientosDto.getCuentaDestino());
+        System.out.println(movimientosDto.getCuentaOrigen());
+
         movimientosService.transferir(movimientosDto);
-        Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuentaOrigen());
+        Cuenta cuenta = cuentaService.findById(movimientosDto.getCuentaOrigen());
         return cuenta.getMovimientos().getLast();
     }
 

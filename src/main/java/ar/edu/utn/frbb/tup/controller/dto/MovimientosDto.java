@@ -1,7 +1,5 @@
 package ar.edu.utn.frbb.tup.controller.dto;
 
-import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-
 public class MovimientosDto {
     private Double monto;
     private String tipoMoneda;

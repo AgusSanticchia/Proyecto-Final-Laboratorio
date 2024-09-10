@@ -28,7 +28,7 @@ public class MovimientosValidator {
     validateMonto(movimientosTransferenciasDto.getMonto());
     validateTipoMoneda(TipoMoneda.fromString(movimientosTransferenciasDto.getTipoMoneda()));
 
-    if (movimientosTransferenciasDto.getNumeroCuentaOrigen() == movimientosTransferenciasDto.getNumeroCuentaDestino()) {
+    if (movimientosTransferenciasDto.getCuentaOrigen() == movimientosTransferenciasDto.getCuentaDestino()) {
       throw new TipoCuentaNoSoportadaException("La cuenta origen y destino no pueden ser la misma");
     }
   }

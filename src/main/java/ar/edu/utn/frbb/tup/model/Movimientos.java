@@ -25,8 +25,8 @@ public class Movimientos {
     }
 
     public Movimientos(MovimientosTransferenciasDto movimientosTransferenciasDto) {
-        this.cuentaDestino = movimientosTransferenciasDto.getNumeroCuentaDestino();
-        this.cuentaOrigen = movimientosTransferenciasDto.getNumeroCuentaOrigen();
+        this.cuentaDestino = movimientosTransferenciasDto.getCuentaDestino();
+        this.cuentaOrigen = movimientosTransferenciasDto.getCuentaOrigen();
         this.fecha = LocalDateTime.now();
         this.monto = movimientosTransferenciasDto.getMonto();
         this.tipoMoneda = TipoMoneda.fromString(movimientosTransferenciasDto.getTipoMoneda());

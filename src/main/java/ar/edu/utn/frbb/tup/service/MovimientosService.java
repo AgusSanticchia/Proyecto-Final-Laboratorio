@@ -67,13 +67,13 @@ public class MovimientosService {
     }
 
     public Movimientos transferir(MovimientosTransferenciasDto transferencias) throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
-        Cuenta cuentaOrigen = cuentaDao.find(transferencias.getNumeroCuentaOrigen());
-        Cuenta cuentaDestino = cuentaDao.find(transferencias.getNumeroCuentaDestino());
+        Cuenta cuentaOrigen = cuentaDao.find(transferencias.getCuentaOrigen());
+        Cuenta cuentaDestino = cuentaDao.find(transferencias.getCuentaDestino());
+        System.out.println(cuentaOrigen);
+        System.out.println(cuentaDestino);
 
         if (cuentaOrigen != null) {
             Movimientos transferencia = new Movimientos(transferencias);
-
-            if (cuentaOrigen.getTipoMoneda().equals(transferencias.getTipoMoneda())) {  // checkeamos que las monedas sean compatibles entre json y cuenta
 
                 if (cuentaDestino != null) { // Si la cuenta destino no existe ejecutamos la transferencia de Banelco
 
@@ -108,9 +108,6 @@ public class MovimientosService {
                     // Invocacion al servicio balenco
                     banelcoExterno(transferencias, cuentaOrigen);
                 }
-            } else {
-                throw new MonedasIncompatiblesException("Son diferentes monedas");
-            }
         } else {
             throw new CuentaNotFoundException("La cuenta de origen no existe");
         }
@@ -151,8 +148,8 @@ public void banelcoExterno(MovimientosTransferenciasDto transferencia, Cuenta cu
 
     // Llamar al servicio externo para realizar la transferencia
     boolean transferenciaExitosa = banelcoService.realizarTransferenciaBanelco(
-            transferencia.getNumeroCuentaOrigen(),
-            transferencia.getNumeroCuentaDestino(),
+            transferencia.getCuentaOrigen(),
+            transferencia.getCuentaDestino(),
             transferencia.getMonto()
     );
 

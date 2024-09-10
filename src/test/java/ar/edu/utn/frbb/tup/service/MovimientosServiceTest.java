@@ -44,8 +44,8 @@ public class MovimientosServiceTest {
         Cuenta cuentaOrigen = new Cuenta();
         Cuenta cuentaDestino = new Cuenta();
 
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(cuentaDestino);
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
 
         // Act
         movimientosService.transferir(transferenciaDto);
@@ -61,8 +61,8 @@ public class MovimientosServiceTest {
         Cuenta cuentaOrigen = new Cuenta();
         Cuenta cuentaDestino = new Cuenta();
 
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(cuentaDestino);
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
         when(banelcoService.realizarTransferenciaBanelco(anyLong(), anyLong(), anyDouble())).thenReturn(true); // Transferencia exitosa
 
         // Act
@@ -77,8 +77,8 @@ public class MovimientosServiceTest {
         // Arrange
         MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "PESOS");
         Cuenta cuentaOrigen = new Cuenta();
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(null); // Cuenta destino no encontrada
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(null); // Cuenta destino no encontrada
         when(banelcoService.realizarTransferenciaBanelco(anyLong(), anyLong(), anyDouble())).thenReturn(false); // Transferencia externa falla
 
         // Act & Assert
@@ -92,8 +92,8 @@ public class MovimientosServiceTest {
         MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 500.0, "ARS");
         Cuenta cuentaDestino = new Cuenta();
 
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(null); // Cuenta de origen no encontrada
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(cuentaDestino);
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(null); // Cuenta de origen no encontrada
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
 
         // Act & Assert
         assertThrows(CuentaNotFoundException.class, () -> {
@@ -107,8 +107,8 @@ public class MovimientosServiceTest {
         Cuenta cuentaOrigen = new Cuenta();
         Cuenta cuentaDestino = new Cuenta();
 
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(cuentaDestino);
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
 
         // Act & Assert
         assertThrows(MonedasIncompatiblesException.class, () -> {
@@ -122,8 +122,8 @@ public class MovimientosServiceTest {
         Cuenta cuentaOrigen = new Cuenta(); // Fondos insuficientes
         Cuenta cuentaDestino = new Cuenta();
 
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(cuentaDestino);
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
 
         // Act & Assert
         assertThrows(FondosInsuficientesException.class, () -> {
@@ -135,8 +135,8 @@ public class MovimientosServiceTest {
         // Arrange
         MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "ARS");
         Cuenta cuentaOrigen = new Cuenta(); // Cuenta interna
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(null); // Externa
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(null); // Externa
 
         when(banelcoService.realizarTransferenciaBanelco(anyLong(), anyLong(), anyDouble())).thenReturn(false); // Falla la transferencia
 
@@ -152,8 +152,8 @@ public class MovimientosServiceTest {
         Cuenta cuentaOrigen = new Cuenta();
         Cuenta cuentaDestino = new Cuenta();
 
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getNumeroCuentaDestino())).thenReturn(cuentaDestino);
+        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
 
         // Act
         movimientosService.transferir(transferenciaDto);
@@ -173,7 +173,7 @@ public class MovimientosServiceTest {
         when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
 
         // Act
-        Movimientos movimiento = movimientosService.depositar(movimientosDto);
+        Movimientos movimientos = movimientosService.depositar(movimientosDto);
 
         // Assert
         assertEquals(6000.0, cuenta.getBalance()); // Verifica que el saldo sea correcto
