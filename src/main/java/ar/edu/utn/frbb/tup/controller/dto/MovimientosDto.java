@@ -12,17 +12,13 @@ public class MovimientosDto {
         this.numeroCuenta = numeroCuenta;
         this.tipoMoneda = tipoMoneda;
     }
-
     public Double getMonto() {
         return monto;
     }
-
     public String getTipoMoneda() {
         return tipoMoneda;
     }
-
     public long getNumeroCuenta() {
         return numeroCuenta;
     }
 }
-

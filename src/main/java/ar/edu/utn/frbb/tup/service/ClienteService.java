@@ -43,7 +43,7 @@ public class ClienteService {
         }
     }
 
-    public void addCuentaToCliente(Cuenta cuenta, long dniTitular) throws ClienteAlreadyExistsException{
+    public void addCuentaToCliente(Cuenta cuenta, long dniTitular) throws ClienteAlreadyExistsException, ClienteNotFoundException {
         Cliente cliente = buscarClientePorDni(dniTitular);
         cuenta.setDniTitular(cliente.getDni());
         if (cliente.tieneCuenta(cuenta.getTipoCuenta(), cuenta.getTipoMoneda())){

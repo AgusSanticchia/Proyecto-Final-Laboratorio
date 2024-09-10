@@ -21,6 +21,7 @@ public class Movimientos {
         this.monto = movimientosDto.getMonto();
         this.cuentaOrigen = movimientosDto.getNumeroCuenta();
         this.tipoMoneda = TipoMoneda.fromString(movimientosDto.getTipoMoneda());
+        this.fecha = LocalDateTime.now();
     }
 
     public Movimientos(MovimientosTransferenciasDto movimientosTransferenciasDto) {
@@ -51,17 +52,8 @@ public class Movimientos {
         return tipoMoneda;
     }
 
-    public TipoOperacion getTipoOperacion() {
-        return tipoOperacion;
-    }
-
     public void setTipoOperacion(TipoOperacion tipoOperacion) {
         this.tipoOperacion = tipoOperacion;
-    }
-
-    @Override
-    public String toString() {
-        return "\n Tipo de Operacion: " + getTipoOperacion() + "\n Monto: " + getMonto() + "\n Fecha: " + getFecha();
     }
 
     public LocalDateTime getFecha() {

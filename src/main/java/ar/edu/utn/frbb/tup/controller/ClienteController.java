@@ -3,8 +3,7 @@ package ar.edu.utn.frbb.tup.controller;
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cliente;
-import ar.edu.utn.frbb.tup.model.exception.MenorDeEdadException;
-import ar.edu.utn.frbb.tup.model.exception.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.*;
 import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +23,7 @@ public class ClienteController {
     private ClienteValidator clienteValidator;
 
     @PostMapping
-    public ResponseEntity<Cliente>  createCliente(@RequestBody ClienteDto clienteDto) throws MenorDeEdadException {
+    public ResponseEntity<Cliente>  createCliente(@RequestBody ClienteDto clienteDto) throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, TipoMonedaNoSoportadaException {
         clienteValidator.validate(clienteDto);
         Cliente cliente = clienteService.darDeAltaCliente(clienteDto);
         return new ResponseEntity<>(cliente, HttpStatus.CREATED);

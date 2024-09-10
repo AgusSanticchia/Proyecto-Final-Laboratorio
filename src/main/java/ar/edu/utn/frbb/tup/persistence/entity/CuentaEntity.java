@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public class CuentaEntity extends BaseEntity{
     String nombre;
-    long contadorCuenta;
     LocalDateTime fechaCreacion;
     double balance;
     String tipoCuenta;

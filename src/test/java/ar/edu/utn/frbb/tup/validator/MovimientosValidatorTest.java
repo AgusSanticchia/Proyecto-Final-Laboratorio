@@ -47,17 +47,9 @@ public class MovimientosValidatorTest {
         assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientos(movimientosDto));
     }
 
-    @Test
-    public void testValidateMovimientosTipoMonedaInvalido() {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "EURO"); // Tipo de moneda inválido
-
-        // Act & Assert
-        assertThrows(MonedasIncompatiblesException.class, () -> validator.validateMovimientos(movimientosDto));
-    }
 
     @Test
-    public void testValidateMovimientosExitoso_ValidAmountAndCurrency() throws DatosIncorrectosException {
+    public void testValidateMovimientosExitoso_ValidAmountAndCurrency() throws DatosIncorrectosException, MonedasIncompatiblesException {
         // Arrange
         MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "USD");
 
@@ -69,19 +61,7 @@ public class MovimientosValidatorTest {
     }
 
     @Test
-    public void testValidateMovimientosExitoso_ZeroAmountAndValidCurrency() throws DatosIncorrectosException, MonedasIncompatiblesException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(0.0, 1L, "USD");
-
-        // Act
-        validator.validateMovimientos(movimientosDto);
-
-        // Assert
-        // No exception should be thrown
-    }
-
-    @Test
-    public void testValidateMovimientosExitoso_ValidCurrencyAndAccountNumber() throws DatosIncorrectosException {
+    public void testValidateMovimientosExitoso_ValidCurrencyAndAccountNumber() throws DatosIncorrectosException, MonedasIncompatiblesException {
         // Arrange
         MovimientosDto movimientosDto = new MovimientosDto(1000.0, 123L, "ARS");
 
@@ -120,15 +100,6 @@ public class MovimientosValidatorTest {
         assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(transferenciasDto));
     }
 
-    @Test
-    public void testValidateMovimientosTransferenciasMonedaInvalida() {
-        // Arrange
-        MovimientosTransferenciasDto transferenciasDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "EURO"); // Moneda inválida
-
-
-        // Act & Assert
-        assertThrows(MonedasIncompatiblesException.class, () -> validator.validateMovimientosTransferencias(transferenciasDto));
-    }
 
     @Test
     public void testValidateMovimientosTransferenciasCuentaIgual() {

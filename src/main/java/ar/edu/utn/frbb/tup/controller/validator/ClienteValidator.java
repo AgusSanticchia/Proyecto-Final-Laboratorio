@@ -15,7 +15,7 @@ import java.time.format.DateTimeParseException;
 @Component
 public class ClienteValidator {
 
-    public void validate(ClienteDto clienteDto) throws DatosIncorrectosException {
+    public void validate(ClienteDto clienteDto) throws DatosIncorrectosException, TipoPersonaNoSoportadaException, TipoMonedaNoSoportadaException {
         validateTipoPersona(clienteDto);
         validateFechaDeNacimiento(clienteDto);
         validateEdad(clienteDto);
@@ -29,7 +29,7 @@ public class ClienteValidator {
             throw new MenorDeEdadException("El cliente debe ser mayor de edad");
         }
     }
-    public void validateTipoPersona(ClienteDto clienteDto) throws TipoPersonaNoSoportadaException {
+    public void validateTipoPersona(ClienteDto clienteDto) throws TipoPersonaNoSoportadaException, TipoMonedaNoSoportadaException {
         try {
             TipoPersona.fromString(clienteDto.getTipoPersona());
         } catch (IllegalArgumentException ex) {

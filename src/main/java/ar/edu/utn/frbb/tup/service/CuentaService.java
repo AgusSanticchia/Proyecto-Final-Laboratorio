@@ -4,9 +4,7 @@ import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.*;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,7 @@ public class CuentaService {
     @Autowired
     ClienteService clienteService;
 
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteAlreadyExistsException {
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteAlreadyExistsException, CuentaNotExistException, ClienteNotFoundException {
         Cuenta cuenta = new Cuenta(cuentaDto);
 
         if(cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
@@ -54,7 +52,7 @@ public class CuentaService {
         return cuentaDao.findAll();
     }
 
-    public Cuenta findById(long id) {
+    public Cuenta findById(long id) throws CuentaNotExistException {
         return cuentaDao.find(id);
     }
 }

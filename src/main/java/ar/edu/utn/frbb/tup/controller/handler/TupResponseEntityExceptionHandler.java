@@ -20,25 +20,26 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
             TipoCuentaAlreadyExistsException.class
     })
     protected ResponseEntity<Object> handleConflictExceptions(
-            Exception ex, WebRequest request) {
+            Throwable ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
         error.setErrorCode(409);
         error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(value = {
             ClienteNotFoundException.class,
-            CuentaNotFoundException.class
+            CuentaNotFoundException.class,
+            CuentaNotExistException.class
     })
     protected ResponseEntity<Object> handleNotFoundExceptions(
-            RuntimeException ex, WebRequest request) {
+            Throwable ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
         error.setErrorCode(404);  // 404 Not Found
         error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = {
@@ -53,12 +54,12 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
             MonedasIncompatiblesException.class
     })
     protected ResponseEntity<Object> handleForbiddenExceptions(
-            RuntimeException ex, WebRequest request) {
+            Throwable ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
         error.setErrorCode(403);  // 403 Forbidden
         error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler(value = {
@@ -66,12 +67,12 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
             DatosIncorrectosException.class
     })
     protected ResponseEntity<Object> handleBadRequestExceptions(
-            RuntimeException ex, WebRequest request) {
+            Throwable ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
         error.setErrorCode(400);  // 400 Bad Request
         error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @Override
@@ -83,5 +84,4 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
         }
         return new ResponseEntity<>(body, headers, status);
     }
-
 }

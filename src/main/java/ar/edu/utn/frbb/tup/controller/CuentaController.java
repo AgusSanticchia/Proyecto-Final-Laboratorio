@@ -23,13 +23,13 @@ public class CuentaController {
     private CuentaValidator cuentaValidator;
 
     @PostMapping
-    public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteAlreadyExistsException, Exception {
+    public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteAlreadyExistsException, Exception, TipoMonedaNoSoportadaException, MonedasIncompatiblesException, CuentaNotExistException, ClienteNotFoundException {
         cuentaValidator.validateCuenta(cuentaDto);
         Cuenta cuenta = cuentaService.darDeAltaCuenta(cuentaDto);
         return new ResponseEntity<>(cuenta, HttpStatus.CREATED);
     }
     @GetMapping("/{idCuenta}")
-    public ResponseEntity<Cuenta> getCuentaById(@PathVariable long idCuenta) {
+    public ResponseEntity<Cuenta> getCuentaById(@PathVariable long idCuenta) throws CuentaNotExistException {
         Cuenta cuenta = cuentaService.findById(idCuenta);
         if (cuenta != null) {
             return ResponseEntity.ok(cuenta);

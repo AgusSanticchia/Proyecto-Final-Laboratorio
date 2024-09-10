@@ -28,16 +28,18 @@ public class MovimientosController {
     private MovimientosValidator movimientosValidator;
 
     @PostMapping("/transferencia")
-    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws CuentaNotFoundException, TipoMonedaNoSoportadaException, FondosInsuficientesException, MonedasIncompatiblesException, TipoCuentaNoSoportadaException {
+    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto)
+            throws CuentaNotFoundException, TipoCuentaNoSoportadaException, MonedasIncompatiblesException, FondosInsuficientesException, DatosIncorrectosException, CuentaNotExistException {
+
         movimientosValidator.validateMovimientosTransferencias(movimientosDto);
         movimientosService.transferir(movimientosDto);
-        Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuentaDestino());
+        Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuentaOrigen());
         return cuenta.getMovimientos().getLast();
     }
 
     @PostMapping("/depositos")
     public ResponseEntity<Movimientos> depositos(@RequestBody MovimientosDto movimientosDto)
-            throws CuentaNotFoundException, MonedasIncompatiblesException {
+            throws CuentaNotFoundException, MonedasIncompatiblesException, DatosIncorrectosException, CuentaNotExistException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
         Movimientos deposito = movimientosService.depositar(movimientosDto);
@@ -46,7 +48,7 @@ public class MovimientosController {
 
     @PostMapping("/retiros")
     public ResponseEntity<Movimientos> retiros(@RequestBody MovimientosDto movimientosDto)
-            throws FondosInsuficientesException, CuentaNotFoundException, MonedasIncompatiblesException {
+            throws FondosInsuficientesException, CuentaNotFoundException, MonedasIncompatiblesException, DatosIncorrectosException, CuentaNotExistException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
         Movimientos retiro = movimientosService.retirar(movimientosDto);
@@ -54,7 +56,7 @@ public class MovimientosController {
     }
 
     @GetMapping("/{cuentaId}")
-    public LinkedList<Movimientos> obtenerMovimientos(@PathVariable long numeroCuenta) throws CuentaNotFoundException {
+    public LinkedList<Movimientos> obtenerMovimientos(@PathVariable long numeroCuenta) throws CuentaNotExistException {
         Cuenta cuenta = cuentaService.findById(numeroCuenta);
         return cuenta.getMovimientos();
     }

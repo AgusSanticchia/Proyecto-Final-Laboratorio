@@ -1,7 +1,6 @@
 package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 
@@ -106,7 +105,7 @@ public class Cuenta {
         this.movimientos = movimientos;
     }
 
-    public void addMovimiento(MovimientosTransferenciasDto movimiento) {
+    public void addMovimiento(Movimientos movimiento) {
         this.movimientos.add(movimiento);
     }
 

@@ -14,21 +14,16 @@ public class MovimientosTransferenciasDto {
         this.monto = monto;
         this.tipoMoneda = tipoMoneda;
     }
-
     public Double getMonto() {
         return monto;
     }
-
     public long getNumeroCuentaDestino() {
         return cuentaDestino;
     }
-
     public long getNumeroCuentaOrigen() {
         return cuentaOrigen;
     }
-
     public String getTipoMoneda() {
         return tipoMoneda;
     }
-
 }
