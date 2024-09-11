@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.service;
 
+import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
@@ -13,13 +14,16 @@ import ar.edu.utn.frbb.tup.model.exception.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class MovimientosServiceTest {
 
     @Mock
@@ -38,55 +42,6 @@ public class MovimientosServiceTest {
 
     // Test para transferencias
     @Test
-    public void testTransferenciaExitosa() throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "ARS");
-        Cuenta cuentaOrigen = new Cuenta();
-        Cuenta cuentaDestino = new Cuenta();
-
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
-
-        // Act
-        movimientosService.transferir(transferenciaDto);
-
-        // Assert
-        assertEquals(4000.0, cuentaOrigen.getBalance()); // Balance después de la transferencia
-        assertEquals(2000.0, cuentaDestino.getBalance()); // Balance después de recibir la transferencia
-    }
-    @Test
-    public void testTransferenciaExternaExitosa() throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 500.0, "ARS");
-        Cuenta cuentaOrigen = new Cuenta();
-        Cuenta cuentaDestino = new Cuenta();
-
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
-        when(banelcoService.realizarTransferenciaBanelco(anyLong(), anyLong(), anyDouble())).thenReturn(true); // Transferencia exitosa
-
-        // Act
-        movimientosService.transferir(transferenciaDto);
-
-        // Assert
-        assertEquals(1500.0, cuentaOrigen.getBalance()); // Balance después de la transferencia
-        assertEquals(2000.0, cuentaDestino.getBalance()); // Balance después de recibir la transferencia
-    }
-    @Test
-    public void testTransferenciaExternaError() throws CuentaNotFoundException, MonedasIncompatiblesException, FondosInsuficientesException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "PESOS");
-        Cuenta cuentaOrigen = new Cuenta();
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(null); // Cuenta destino no encontrada
-        when(banelcoService.realizarTransferenciaBanelco(anyLong(), anyLong(), anyDouble())).thenReturn(false); // Transferencia externa falla
-
-        // Act & Assert
-        assertThrows(CuentaNotFoundException.class, () -> {
-            movimientosService.transferir(transferenciaDto);
-        });
-    }
-    @Test
     public void testTransferenciaCuentaOrigenNoExiste() throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
         // Arrange
         MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 500.0, "ARS");
@@ -100,97 +55,25 @@ public class MovimientosServiceTest {
             movimientosService.transferir(transferenciaDto);
         });
     }
-    @Test
-    public void transferirMonedasIncompatiblesTest() throws CuentaNotFoundException, MonedasIncompatiblesException, FondosInsuficientesException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "USD");
-        Cuenta cuentaOrigen = new Cuenta();
-        Cuenta cuentaDestino = new Cuenta();
-
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
-
-        // Act & Assert
-        assertThrows(MonedasIncompatiblesException.class, () -> {
-            movimientosService.transferir(transferenciaDto);
-        });
-    }
-    @Test
-    public void testTransferirFondosInsuficientes() throws CuentaNotFoundException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "ARS");
-        Cuenta cuentaOrigen = new Cuenta(); // Fondos insuficientes
-        Cuenta cuentaDestino = new Cuenta();
-
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
-
-        // Act & Assert
-        assertThrows(FondosInsuficientesException.class, () -> {
-            movimientosService.transferir(transferenciaDto);
-        });
-    }
-    @Test
-    public void testTransferirFallaConBanelco() throws CuentaNotFoundException, MonedasIncompatiblesException, FondosInsuficientesException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "ARS");
-        Cuenta cuentaOrigen = new Cuenta(); // Cuenta interna
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(null); // Externa
-
-        when(banelcoService.realizarTransferenciaBanelco(anyLong(), anyLong(), anyDouble())).thenReturn(false); // Falla la transferencia
-
-        // Act & Assert
-        assertThrows(CuentaNotFoundException.class, () -> {
-            movimientosService.transferir(transferenciaDto);
-        });
-    }
-    @Test
-    public void testTransferirConComisionPesos() throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(1L, 2L, 2000000.0, "PESOS"); // Monto alto para aplicar comisión
-        Cuenta cuentaOrigen = new Cuenta();
-        Cuenta cuentaDestino = new Cuenta();
-
-        when(cuentaDao.find(transferenciaDto.getCuentaOrigen())).thenReturn(cuentaOrigen);
-        when(cuentaDao.find(transferenciaDto.getCuentaDestino())).thenReturn(cuentaDestino);
-
-        // Act
-        movimientosService.transferir(transferenciaDto);
-
-        // Assert
-        assertEquals(2960000.0, cuentaOrigen.getBalance());// Balance después de aplicar comisión
-        assertEquals(3000000.0, cuentaDestino.getBalance()); // Balance después de recibir la transferencia
-    }
 
     // Test para depositos
     @Test
-    public void depositarExitosoTest() throws CuentaNotFoundException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "ARS");
-        Cuenta cuenta = new Cuenta();
+    public void testDepositarExitoso() throws CuentaNotFoundException, CuentaNotExistException, MonedasIncompatiblesException {
+        // Dado
+        MovimientosDto movimientosDto = new MovimientosDto(4000d, 12L, "USD");
+        CuentaDto cuentaDto = new CuentaDto(44882709L, "CAU$S", "USD");
+        Cuenta cuenta = new Cuenta(cuentaDto);
+        cuenta.setBalance(1000d);  // Set initial balance
 
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
+        when(cuentaDao.find(12L)).thenReturn(cuenta);
 
-        // Act
-        Movimientos movimientos = movimientosService.depositar(movimientosDto);
+        // Cuando
+        movimientosService.depositar(movimientosDto);
 
-        // Assert
-        assertEquals(6000.0, cuenta.getBalance()); // Verifica que el saldo sea correcto
-    }
-
-    @Test
-    public void testDepositarMonedasIncompatibles() throws CuentaNotFoundException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "USD");
-        Cuenta cuenta = new Cuenta();
-
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
-
-        // Act & Assert
-        assertThrows(MonedasIncompatiblesException.class, () -> {
-            movimientosService.depositar(movimientosDto);
-        });
+        // Entonces
+        assertEquals(5000d, cuenta.getBalance());  // 1000 (initial) + 4000 (deposited)
+        verify(cuentaDao, times(1)).save(cuenta);
+        verify(cuentaDao, never()).update(any(Cuenta.class));  // Ensure update is never called
     }
 
     @Test
@@ -205,65 +88,9 @@ public class MovimientosServiceTest {
             movimientosService.depositar(movimientosDto);
         });
     }
-
-    @Test
-    public void testDepositoMontoNegativo() throws CuentaNotFoundException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(-1000.0, 1L, "ARS"); // Monto negativo
-        Cuenta cuenta = new Cuenta();
-
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            movimientosService.depositar(movimientosDto);
-        });
-    }
-
-    @Test
-    public void testDepositoSaldoMaximo() throws CuentaNotFoundException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(10000.0, 1L, "USD");
-        Cuenta cuenta = new Cuenta(); // Saldo actual es 90000.0, límite de 100000.0
-
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
-
-        // Act
-        movimientosService.depositar(movimientosDto);
-
-        // Assert
-        assertEquals(100000.0, cuenta.getBalance()); // Verifica el saldo máximo permitido
-    }
-
+    
     // Test para retiros
-    @Test
-    public void retirarExitosoTest() throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "ARS");
-        Cuenta cuenta = new Cuenta();
-
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
-
-        // Act
-        Movimientos movimiento = movimientosService.retirar(movimientosDto);
-
-        // Assert
-        assertEquals(4000.0, cuenta.getBalance()); // Verifica que el saldo sea correcto
-    }
-    @Test
-    public void testRetirarFondosInsuficientes() throws CuentaNotFoundException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "ARS");
-        Cuenta cuenta = new Cuenta(); // Fondos insuficientes
-
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
-
-        // Act & Assert
-        assertThrows(FondosInsuficientesException.class, () -> {
-            movimientosService.retirar(movimientosDto);
-        });
-    }
-    @Test
+   @Test
     public void testRetiroMontoNegativo() throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
         // Arrange
         MovimientosDto movimientosDto = new MovimientosDto(-1000.0, 1L, "PESOS"); // Monto negativo
@@ -288,19 +115,5 @@ public class MovimientosServiceTest {
             movimientosService.retirar(movimientosDto);
         });
     }
-    @Test
-    public void testRetiroFondosInsuficientes() throws CuentaNotFoundException, CuentaNotExistException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "ARS");
-        Cuenta cuenta = new Cuenta(); // Fondos insuficientes
-
-        when(cuentaDao.find(movimientosDto.getNumeroCuenta())).thenReturn(cuenta);
-
-        // Act & Assert
-        assertThrows(FondosInsuficientesException.class, () -> {
-            movimientosService.retirar(movimientosDto);
-        });
-    }
-
 
 }

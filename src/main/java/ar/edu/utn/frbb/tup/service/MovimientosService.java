@@ -38,7 +38,7 @@ public class MovimientosService {
         }
 
         cuenta.setBalance(cuenta.getBalance() + deposito.getMonto());
-        cuentaDao.update(cuenta);
+        cuentaDao.save(cuenta);
 
         return new Movimientos(deposito);
     }
@@ -69,8 +69,6 @@ public class MovimientosService {
     public Movimientos transferir(MovimientosTransferenciasDto transferencias) throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
         Cuenta cuentaOrigen = cuentaDao.find(transferencias.getCuentaOrigen());
         Cuenta cuentaDestino = cuentaDao.find(transferencias.getCuentaDestino());
-        System.out.println(cuentaOrigen);
-        System.out.println(cuentaDestino);
 
         if (cuentaOrigen != null) {
             Movimientos transferencia = new Movimientos(transferencias);

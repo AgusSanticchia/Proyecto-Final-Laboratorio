@@ -33,6 +33,9 @@ public class Cuenta {
         this.cbu = generarCbu();
     }
 
+    public Cuenta(long dniTitular, double balance, String moneda) {
+    }
+
     public TipoMoneda getTipoMoneda() {
         return tipoMoneda;
     }
