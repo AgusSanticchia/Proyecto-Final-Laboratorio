@@ -138,8 +138,6 @@ public class CuentaServiceTest {
         verify(cuentaDao, times(1)).find(accountId);
     }
 
-    // Nuevas pruebas adicionales
-
     @Test
     public void tipoCuentaEstaSoportadaDatosValidos() {
         Cuenta cuentaPesosCA = new Cuenta();
@@ -172,7 +170,6 @@ public class CuentaServiceTest {
     }
 
     // Agregamos pruebas adicionales para cobertura completa
-
     @Test
     public void darDeAltaCuentaDatosValidos() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException {
         CuentaDto validDto = new CuentaDto(12345678L, "CC$", "ARS");
