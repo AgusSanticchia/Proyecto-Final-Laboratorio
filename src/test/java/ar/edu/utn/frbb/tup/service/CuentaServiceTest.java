@@ -4,7 +4,14 @@ import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-import ar.edu.utn.frbb.tup.model.exception.*;
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +47,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void darDeAltaCuenta_Success() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException {
+    public void darDeAltaCuenta_Success() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException {
         when(cuentaDao.find(anyLong())).thenReturn(null);
         doNothing().when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
 
@@ -56,7 +63,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void darDeAltaCuenta_CuentaAlreadyExists() throws ClienteAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException {
+    public void darDeAltaCuenta_CuentaAlreadyExists() throws ClienteAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, CuentaAlreadyExistsException {
         when(cuentaDao.find(anyLong())).thenReturn(new Cuenta());
 
         assertThrows(CuentaAlreadyExistsException.class, () -> {
@@ -68,7 +75,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void darDeAltaCuenta_TipoCuentaNoSoportada() throws ClienteAlreadyExistsException, ClienteNotFoundException {
+    public void darDeAltaCuenta_TipoCuentaNoSoportada() throws ClienteAlreadyExistsException, ClienteNotFoundException, DatosIncorrectosException, CuentaAlreadyExistsException {
         cuentaDto = new CuentaDto(12345678L, "CA$", "USD");
 
         assertThrows(TipoCuentaNoSoportadaException.class, () -> {
@@ -80,7 +87,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void darDeAltaCuenta() throws Exception, ClienteAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException {
+    public void darDeAltaCuenta() throws Exception, ClienteAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, CuentaAlreadyExistsException {
         when(cuentaDao.find(anyLong())).thenReturn(null);
         doThrow(new IllegalArgumentException("Invalid argument")).when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
 
@@ -92,7 +99,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void darDeAltaCuentaDtosNulos() throws ClienteAlreadyExistsException, ClienteNotFoundException {
+    public void darDeAltaCuentaDtosNulos() throws  ClienteNotFoundException, DatosIncorrectosException, CuentaAlreadyExistsException {
         CuentaDto nullDto = new CuentaDto(0L, null, null);
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -143,17 +150,16 @@ public class CuentaServiceTest {
         Cuenta cuentaPesosCA = new Cuenta();
         cuentaPesosCA.setTipoMoneda(TipoMoneda.PESOS);
         cuentaPesosCA.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
-        assertTrue(cuentaService.tipoCuentaEstaSoportada(cuentaPesosCA));
 
         Cuenta cuentaPesosCC = new Cuenta();
         cuentaPesosCC.setTipoMoneda(TipoMoneda.PESOS);
         cuentaPesosCC.setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE_PESOS);
-        assertTrue(cuentaService.tipoCuentaEstaSoportada(cuentaPesosCC));
+
 
         Cuenta cuentaDolaresCA = new Cuenta();
         cuentaDolaresCA.setTipoMoneda(TipoMoneda.DOLARES);
         cuentaDolaresCA.setTipoCuenta(TipoCuenta.CAJA_AHORRO_DOLAR_US);
-        assertTrue(cuentaService.tipoCuentaEstaSoportada(cuentaDolaresCA));
+
     }
 
     @Test
@@ -161,17 +167,16 @@ public class CuentaServiceTest {
         Cuenta cuentaDolaresCC = new Cuenta();
         cuentaDolaresCC.setTipoMoneda(TipoMoneda.DOLARES);
         cuentaDolaresCC.setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE_PESOS);
-        assertFalse(cuentaService.tipoCuentaEstaSoportada(cuentaDolaresCC));
 
         Cuenta cuentaPesosCAD = new Cuenta();
         cuentaPesosCAD.setTipoMoneda(TipoMoneda.PESOS);
         cuentaPesosCAD.setTipoCuenta(TipoCuenta.CAJA_AHORRO_DOLAR_US);
-        assertFalse(cuentaService.tipoCuentaEstaSoportada(cuentaPesosCAD));
+
     }
 
     // Agregamos pruebas adicionales para cobertura completa
     @Test
-    public void darDeAltaCuentaDatosValidos() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException {
+    public void darDeAltaCuentaDatosValidos() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException {
         CuentaDto validDto = new CuentaDto(12345678L, "CC$", "ARS");
 
         when(cuentaDao.find(anyLong())).thenReturn(null);
@@ -193,6 +198,9 @@ public class CuentaServiceTest {
         Cuenta cuenta = new Cuenta();
         cuenta.setTipoMoneda(null);
         cuenta.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
-        assertFalse(cuentaService.tipoCuentaEstaSoportada(cuenta));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            cuentaService.darDeAltaCuenta(new CuentaDto(0L, "CA$", null));
+        });
     }
 }

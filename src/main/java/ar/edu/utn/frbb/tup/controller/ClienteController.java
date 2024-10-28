@@ -4,16 +4,23 @@ import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.exception.*;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
 import ar.edu.utn.frbb.tup.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/api/cliente")
 public class ClienteController {
 
     @Autowired
@@ -22,26 +29,33 @@ public class ClienteController {
     @Autowired
     private ClienteValidator clienteValidator;
 
+    @Operation(summary = "Crear un nuevo cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cliente creado con éxito"),
+            @ApiResponse(responseCode = "400", description = "Error en los datos de entrada")
+    })
     @PostMapping
-    public ResponseEntity<Cliente>  createCliente(@RequestBody ClienteDto clienteDto) throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, TipoMonedaNoSoportadaException {
+    public Cliente createCliente(@RequestBody ClienteDto clienteDto) throws DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException {
         clienteValidator.validate(clienteDto);
-        Cliente cliente = clienteService.darDeAltaCliente(clienteDto);
-        return new ResponseEntity<>(cliente, HttpStatus.CREATED);
-
+        return clienteService.darDeAltaCliente(clienteDto);
     }
 
+    @Operation(summary = "Obtener cliente por DNI")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+    })
     @GetMapping("/{dni}")
-    public ResponseEntity<Cliente> getClientById(@PathVariable long dni) throws ClienteNotFoundException {
-        Cliente cliente = clienteService.buscarClientePorDni(dni);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    public Cliente getClientById(@Parameter(description = "DNI del cliente a buscar", required = true) @PathVariable long dni) throws ClienteNotFoundException {
+        return clienteService.buscarClientePorDni(dni);
     }
 
+    @Operation(summary = "Obtener todos los clientes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de clientes")
+    })
     @GetMapping("/all")
-    public ResponseEntity <List<Cliente>> getAllClients() {
+    public ResponseEntity<List<Cliente>> getAllClientes() {
         List<Cliente> clientes = clienteService.showClientes();
         return ResponseEntity.ok(clientes);
     }

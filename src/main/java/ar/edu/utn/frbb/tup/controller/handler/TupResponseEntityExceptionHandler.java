@@ -1,50 +1,56 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
 import ar.edu.utn.frbb.tup.model.exception.*;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.*;
+import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoCoincidenException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {
+    @ExceptionHandler({
             ClienteAlreadyExistsException.class,
             CuentaAlreadyExistsException.class,
-            TipoCuentaAlreadyExistsException.class
+            TipoCuentaAlreadyExistsException.class,
+            IllegalStateException.class,
+            IllegalArgumentException.class
     })
-    protected ResponseEntity<Object> handleConflictExceptions(
-            Throwable ex, WebRequest request) {
+    protected ResponseEntity<Object> handleConflictExceptions(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
-        error.setErrorCode(409);
-        error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        error.setErrorCode(HttpStatus.CONFLICT.value());
+        error.setErrorMessage(exceptionMessage != null ? exceptionMessage : "Conflicto en la solicitud.");
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = {
+    @ExceptionHandler({
             ClienteNotFoundException.class,
             CuentaNotFoundException.class,
             CuentaNotExistException.class
     })
-    protected ResponseEntity<Object> handleNotFoundExceptions(
-            Throwable ex, WebRequest request) {
+    protected ResponseEntity<Object> handleNotFoundExceptions(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
-        error.setErrorCode(404);  // 404 Not Found
-        error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        error.setErrorCode(HttpStatus.NOT_FOUND.value());
+        error.setErrorMessage(exceptionMessage != null ? exceptionMessage : "Recurso no encontrado.");
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value = {
-            CuentaNoPermitidaException.class,
-            CuentaPermitidaException.class,
+    @ExceptionHandler({
             TipoCuentaNoSoportadaException.class,
             TipoMonedaNoCoincidenException.class,
             TipoMonedaNoSoportadaException.class,
@@ -53,33 +59,32 @@ public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHa
             MenorDeEdadException.class,
             MonedasIncompatiblesException.class
     })
-    protected ResponseEntity<Object> handleForbiddenExceptions(
-            Throwable ex, WebRequest request) {
+    protected ResponseEntity<Object> handleForbiddenExceptions(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
-        error.setErrorCode(403);  // 403 Forbidden
-        error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+        error.setErrorCode(HttpStatus.FORBIDDEN.value());
+        error.setErrorMessage(exceptionMessage != null ? exceptionMessage : "Acceso prohibido.");
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
-    @ExceptionHandler(value = {
+    @ExceptionHandler({
             FondosInsuficientesException.class,
             DatosIncorrectosException.class
     })
-    protected ResponseEntity<Object> handleBadRequestExceptions(
-            Throwable ex, WebRequest request) {
+    protected ResponseEntity<Object> handleBadRequestExceptions(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
-        error.setErrorCode(400);  // 400 Bad Request
-        error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal((Exception) ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        error.setErrorMessage(exceptionMessage != null ? exceptionMessage : "Solicitud incorrecta.");
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         if (body == null) {
             CustomApiError error = new CustomApiError();
-            error.setErrorMessage(ex.getMessage());
+            error.setErrorCode(status.value());
+            error.setErrorMessage(ex.getMessage() != null ? ex.getMessage() : "Error inesperado.");
             body = error;
         }
         return new ResponseEntity<>(body, headers, status);

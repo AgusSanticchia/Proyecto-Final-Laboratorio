@@ -7,7 +7,10 @@ import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.Movimientos;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.enums.TipoOperacion;
-import ar.edu.utn.frbb.tup.model.exception.*;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.FondosInsuficientesException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,12 +27,11 @@ public class MovimientosService {
     @Autowired
     MovimientosValidator MovimientosValidator;
 
-    public Movimientos depositar(MovimientosDto deposito)
-            throws CuentaNotFoundException, MonedasIncompatiblesException, CuentaNotExistException {
+    public Movimientos depositar(MovimientosDto deposito) throws MonedasIncompatiblesException, CuentaNotExistException {
 
         Cuenta cuenta = cuentaDao.find(deposito.getNumeroCuenta());
         if (cuenta == null) {
-            throw new CuentaNotFoundException("Cuenta no encontrada");
+            System.out.println("Cuenta no encontrada");
         }
 
         TipoMoneda tipoMonedaDeposito = TipoMoneda.fromString(deposito.getTipoMoneda());
@@ -43,9 +45,7 @@ public class MovimientosService {
         return new Movimientos(deposito);
     }
 
-    public Movimientos retirar(MovimientosDto retiro)
-            throws FondosInsuficientesException, CuentaNotFoundException, MonedasIncompatiblesException, CuentaNotExistException {
-
+    public Movimientos retirar(MovimientosDto retiro) throws CuentaNotFoundException, MonedasIncompatiblesException, FondosInsuficientesException, CuentaNotExistException{
         Cuenta cuenta = cuentaDao.find(retiro.getNumeroCuenta());
         if (cuenta == null) {
             throw new CuentaNotFoundException("Cuenta no encontrada");
@@ -66,7 +66,7 @@ public class MovimientosService {
         return new Movimientos(retiro);
     }
 
-    public Movimientos transferir(MovimientosTransferenciasDto transferencias) throws CuentaNotFoundException, FondosInsuficientesException, MonedasIncompatiblesException, CuentaNotExistException {
+    public Movimientos transferir(MovimientosTransferenciasDto transferencias) throws CuentaNotExistException, CuentaNotFoundException, MonedasIncompatiblesException, FondosInsuficientesException {
         Cuenta cuentaOrigen = cuentaDao.find(transferencias.getCuentaOrigen());
         Cuenta cuentaDestino = cuentaDao.find(transferencias.getCuentaDestino());
 
@@ -112,7 +112,6 @@ public class MovimientosService {
 
         return new Movimientos(transferencias);
     }
-
 
 private double comision(MovimientosTransferenciasDto transferencia, TipoMoneda tipoMoneda){
     double monto = transferencia.getMonto();

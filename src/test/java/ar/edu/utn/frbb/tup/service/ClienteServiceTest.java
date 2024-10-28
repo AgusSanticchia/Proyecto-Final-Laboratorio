@@ -7,6 +7,11 @@ import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 import ar.edu.utn.frbb.tup.model.exception.*;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +63,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testDarDeAltaClienteNuevoCliente() throws MenorDeEdadException, DatosIncorrectosException {
+    public void testDarDeAltaClienteNuevoCliente() throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException {
         when(clienteDao.find(clienteDto.getDni())).thenReturn(null);
         doNothing().when(clienteDao).save(any(Cliente.class));
 
@@ -100,7 +105,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testDarDeAltaClienteClienteExistente() throws MenorDeEdadException, DatosIncorrectosException {
+    public void testDarDeAltaClienteClienteExistente() throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException {
         when(clienteDao.find(clienteDto.getDni())).thenReturn(cliente);
 
         Cliente result = clienteService.darDeAltaCliente(clienteDto);
@@ -127,7 +132,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testAddCuentaToCliente() throws ClienteNotFoundException, ClienteAlreadyExistsException {
+    public void testAddCuentaToCliente() throws ClienteNotFoundException, ClienteAlreadyExistsException, DatosIncorrectosException, CuentaAlreadyExistsException {
         Cuenta cuenta = new Cuenta();
         cuenta.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
         cuenta.setTipoMoneda(TipoMoneda.PESOS);

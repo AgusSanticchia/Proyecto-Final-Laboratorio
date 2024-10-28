@@ -30,8 +30,8 @@ public class CuentaEntity extends BaseEntity{
         this.tipoMoneda = cuenta.getTipoMoneda();
         this.movimientos = cuenta.getMovimientos();
     }
-
     public void updateFromCuenta(Cuenta cuenta) {
+        // Update the balance and tipoMoneda from the cuenta
         this.balance = cuenta.getBalance();
         this.tipoMoneda = cuenta.getTipoMoneda();
         this.titular = cuenta.getDniTitular();
@@ -39,9 +39,13 @@ public class CuentaEntity extends BaseEntity{
     }
 
     public Cuenta toCuenta() {
+        // Create a new cuenta object
         Cuenta cuenta = new Cuenta();
+
+        // Set the data from the entity to the cuenta object
         cuenta.setBalance(this.balance);
         cuenta.setNumeroCuenta(this.numeroCuenta);
+        // Use the valueOf method to convert the String to a TipoCuenta enum
         cuenta.setTipoCuenta(TipoCuenta.valueOf(this.tipoCuenta));
         cuenta.setDniTitular(this.titular);
         cuenta.setFechaCreacion(this.fechaCreacion);

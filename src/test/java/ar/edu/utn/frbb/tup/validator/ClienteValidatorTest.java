@@ -2,11 +2,9 @@ package ar.edu.utn.frbb.tup.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
-import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
 import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.MenorDeEdadException;
-import ar.edu.utn.frbb.tup.model.exception.TipoMonedaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

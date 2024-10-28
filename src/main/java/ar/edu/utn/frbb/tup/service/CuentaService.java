@@ -1,10 +1,16 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
-import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
-import ar.edu.utn.frbb.tup.model.exception.*;
+import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,37 +21,26 @@ import java.util.List;
 public class CuentaService {
 
     @Autowired
-    CuentaDao cuentaDao;
+    private CuentaDao cuentaDao;
 
     @Autowired
-    ClienteService clienteService;
+    private ClienteService clienteService;
 
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteAlreadyExistsException, CuentaNotExistException, ClienteNotFoundException {
+    @Autowired
+    private CuentaValidator cuentaValidator;
+
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaNotExistException, ClienteNotFoundException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException, DatosIncorrectosException {
+        cuentaValidator.validateCuenta(cuentaDto);
+
         Cuenta cuenta = new Cuenta(cuentaDto);
 
-        if(cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
+        if (cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
             throw new CuentaAlreadyExistsException("La cuenta " + cuenta.getNumeroCuenta() + " ya existe.");
         }
 
-        if (!tipoCuentaEstaSoportada(cuenta)) {
-            throw new TipoCuentaNoSoportadaException("El tipo de cuenta " + cuenta.getTipoCuenta() + " no esta soportada.");
-        }
-        
         clienteService.addCuentaToCliente(cuenta, cuentaDto.getDniTitular());
         cuentaDao.save(cuenta);
         return cuenta;
-    }
-
-    public boolean tipoCuentaEstaSoportada(Cuenta cuenta){
-        if (cuenta.getTipoMoneda() == TipoMoneda.DOLARES &&
-                cuenta.getTipoCuenta() == TipoCuenta.CAJA_AHORRO_DOLAR_US){
-            return true;
-        }
-
-        return cuenta.getTipoMoneda() == TipoMoneda.PESOS &&
-                (cuenta.getTipoCuenta() == TipoCuenta.CUENTA_CORRIENTE_PESOS ||
-                        cuenta.getTipoCuenta() == TipoCuenta.CAJA_AHORRO_PESOS);
-
     }
 
     public List<Cuenta> showCuentas() {
@@ -53,6 +48,10 @@ public class CuentaService {
     }
 
     public Cuenta findById(long id) throws CuentaNotExistException {
-        return cuentaDao.find(id);
+        Cuenta cuenta = cuentaDao.find(id);
+        if (cuenta == null) {
+            throw new CuentaNotExistException("La cuenta no existe.");
+        }
+        return cuenta;
     }
 }
