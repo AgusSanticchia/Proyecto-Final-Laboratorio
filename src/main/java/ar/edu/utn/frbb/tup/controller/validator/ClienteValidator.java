@@ -1,9 +1,9 @@
 package ar.edu.utn.frbb.tup.controller.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
-import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.MenorDeEdadException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.clientes.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.exception.clientes.TipoPersonaNoSoportadaException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -13,13 +13,34 @@ import java.time.format.DateTimeParseException;
 @Component
 public class ClienteValidator {
 
-    public void validate(ClienteDto clienteDto) throws TipoPersonaNoSoportadaException, DatosIncorrectosException {
+    public void validate(ClienteDto clienteDto) throws TipoPersonaNoSoportadaException, DatosIncorrectosException, MenorDeEdadException {
+        validateDatosCompletos(clienteDto);
         validateTipoPersona(clienteDto);
         validateFechaDeNacimiento(clienteDto);
         validateEdad(clienteDto);
     }
 
-    private void validateEdad(ClienteDto clienteDto) throws DatosIncorrectosException {
+    private void validateDatosCompletos(ClienteDto clienteDto) throws DatosIncorrectosException {
+        //Nombre
+        if (clienteDto.getNombre() == null || clienteDto.getNombre().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un nombre");
+        //Apellido
+        if (clienteDto.getApellido() == null || clienteDto.getApellido().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un apellido");
+        //Dni
+        if (clienteDto.getDni() == 0) throw new IllegalArgumentException("Error: Ingrese un dni");
+        if (clienteDto.getDni() < 10000000 || clienteDto.getDni() > 99999999) throw new IllegalArgumentException("Error: El dni debe tener 8 digitos");
+        //Direccion
+        if (clienteDto.getDireccion() == null || clienteDto.getDireccion().isEmpty()) throw new IllegalArgumentException("Error: Ingrese una direccion");
+        //Fecha Nacimiento
+        if (clienteDto.getFechaNacimiento() == null || clienteDto.getFechaNacimiento().isEmpty()) throw new IllegalArgumentException("Error: Ingrese una fecha de nacimiento");
+        //Telefono
+        if (clienteDto.getTelefono() == null || clienteDto.getTelefono().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un telefono");
+        //Banco
+        if (clienteDto.getBanco() == null || clienteDto.getBanco().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un banco");
+        //Tipo persona
+        if (clienteDto.getTipoPersona() == null || clienteDto.getTipoPersona().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de persona");
+    }
+
+    private void validateEdad(ClienteDto clienteDto) throws DatosIncorrectosException, MenorDeEdadException {
         try {
             LocalDate fechaNacimiento = LocalDate.parse(clienteDto.getFechaNacimiento());
             int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();

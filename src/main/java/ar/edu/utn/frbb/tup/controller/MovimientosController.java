@@ -3,14 +3,13 @@ package ar.edu.utn.frbb.tup.controller;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.controller.validator.MovimientosValidator;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.Movimientos;
-import ar.edu.utn.frbb.tup.model.exception.*;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotFoundException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.FondosInsuficientesException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.exception.cuentas.FondosInsuficientesException;
+import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.service.CuentaService;
 import ar.edu.utn.frbb.tup.service.MovimientosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +42,7 @@ public class MovimientosController {
             @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/transferencia")
-    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, CuentaNotFoundException, TipoCuentaNoSoportadaException, FondosInsuficientesException {
+    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, TipoCuentaNoSoportadaException, FondosInsuficientesException {
 
         movimientosValidator.validateMovimientosTransferencias(movimientosDto);
         movimientosService.transferir(movimientosDto);
@@ -75,7 +74,7 @@ public class MovimientosController {
             @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/retiros")
-    public Movimientos retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, FondosInsuficientesException, CuentaNotFoundException {
+    public Movimientos retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, FondosInsuficientesException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
         movimientosService.retirar(movimientosDto);

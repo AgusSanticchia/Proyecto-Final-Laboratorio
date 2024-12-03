@@ -1,30 +1,27 @@
 package ar.edu.utn.frbb.tup.controller.validator;
 
-import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
 import org.springframework.stereotype.Component;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 
 @Component
 public class CuentaValidator {
 
-    public void validateCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException {
-        validateTipoCuenta(cuentaDto);
-        validateTipoMoneda(cuentaDto);
+    public void validateCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, MonedasIncompatiblesException {
+        validateDatostosCuenta(cuentaDto);
         validateMonedaCompatibilidad(cuentaDto);
     }
 
-    private void validateTipoCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException {
-        if (!"CC$".equals(cuentaDto.getTipoCuenta()) && !"CAU$S".equals(cuentaDto.getTipoCuenta()) && !"CA$".equals(cuentaDto.getTipoCuenta())) {
-            throw new TipoCuentaNoSoportadaException("Tipo de cuenta no válido: " + cuentaDto.getTipoCuenta());
-        }
-    }
+    private void validateDatostosCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException {
+        //Tipo de cuenta
+        if (cuentaDto.getTipoCuenta() == null || cuentaDto.getTipoCuenta().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de cuenta");
+        //Tipo de moneda
+        if (cuentaDto.getTipoMoneda() == null || cuentaDto.getTipoMoneda().isEmpty()) throw new IllegalArgumentException("Error: Ingrese un tipo de moneda");
+        //DNI Titular
+        if (cuentaDto.getDniTitular() == 0) throw new IllegalArgumentException("Error: Ingrese un dni");
 
-    private void validateTipoMoneda(CuentaDto cuentaDto) throws TipoMonedaNoSoportadaException {
-        if (!"ARS".equals(cuentaDto.getTipoMoneda()) && !"USD".equals(cuentaDto.getTipoMoneda())) {
-            throw new TipoMonedaNoSoportadaException("Tipo de moneda no válido: " + cuentaDto.getTipoMoneda());
-        }
+        if (cuentaDto.getDniTitular() < 10000000 || cuentaDto.getDniTitular() > 99999999) throw new IllegalArgumentException("Error: El dni debe tener 8 digitos");
     }
 
     private void validateMonedaCompatibilidad(CuentaDto cuentaDto) throws MonedasIncompatiblesException {

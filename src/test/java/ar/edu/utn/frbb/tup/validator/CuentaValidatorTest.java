@@ -2,9 +2,8 @@ package ar.edu.utn.frbb.tup.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
-import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
+import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

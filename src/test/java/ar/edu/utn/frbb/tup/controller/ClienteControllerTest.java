@@ -17,9 +17,6 @@ import static org.mockito.Mockito.*;
 public class ClienteControllerTest {
 
     @Mock
-    private ValidatorService validatorService;
-
-    @Mock
     private ClienteService clienteService;
 
     @InjectMocks

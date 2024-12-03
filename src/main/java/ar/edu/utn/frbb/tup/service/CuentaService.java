@@ -3,14 +3,12 @@ package ar.edu.utn.frbb.tup.service;
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class CuentaService {
     @Autowired
     private CuentaValidator cuentaValidator;
 
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaNotExistException, ClienteNotFoundException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException, DatosIncorrectosException {
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteNotFoundException, MonedasIncompatiblesException, DatosIncorrectosException {
         cuentaValidator.validateCuenta(cuentaDto);
 
         Cuenta cuenta = new Cuenta(cuentaDto);

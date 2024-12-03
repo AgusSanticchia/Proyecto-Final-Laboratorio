@@ -2,13 +2,14 @@ package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.clientes.MenorDeEdadException;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.exception.*;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.TipoPersonaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.exception.clientes.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class ClienteService {
     @Autowired
     private ClienteValidator clienteValidator;
 
-    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatosIncorrectosException, TipoPersonaNoSoportadaException {
+    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatosIncorrectosException, TipoPersonaNoSoportadaException, MenorDeEdadException {
         clienteValidator.validate(clienteDto);
 
         Cliente clienteExistente = clienteDao.find(clienteDto.getDni());

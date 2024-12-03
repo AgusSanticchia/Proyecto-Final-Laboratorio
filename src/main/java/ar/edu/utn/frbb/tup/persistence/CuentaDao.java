@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaNotExistException;
 import ar.edu.utn.frbb.tup.persistence.entity.CuentaEntity;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class CuentaDao extends AbstractBaseDao {
         getInMemoryDatabase().put(entity.getId(), entity);
     }
 
-    public Cuenta find(long id) throws CuentaNotExistException {
+    public Cuenta find(long id){
         if (getInMemoryDatabase().get(id) == null) {
             return null;
         }

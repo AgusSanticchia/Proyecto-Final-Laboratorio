@@ -1,17 +1,17 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.enums.TipoPersona;
-import ar.edu.utn.frbb.tup.model.exception.*;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.MenorDeEdadException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.TipoPersonaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.exception.clientes.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.exception.clientes.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.exception.clientes.TipoPersonaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

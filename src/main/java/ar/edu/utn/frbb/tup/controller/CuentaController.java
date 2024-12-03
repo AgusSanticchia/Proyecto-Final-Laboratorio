@@ -2,14 +2,12 @@ package ar.edu.utn.frbb.tup.controller;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
-import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.ClienteNotFoundException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.CuentaNotExistException;
-import ar.edu.utn.frbb.tup.model.exception.cuentas.TipoCuentaNoSoportadaException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.MonedasIncompatiblesException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.clientes.ClienteNotFoundException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaNotExistException;
+import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.service.CuentaService;
 import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +37,7 @@ public class CuentaController {
     })
     @PostMapping
     public Cuenta createCuenta(@RequestBody CuentaDto cuentaDto)
-            throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException, CuentaNotExistException, ClienteNotFoundException, DatosIncorrectosException {
+            throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, MonedasIncompatiblesException, CuentaNotExistException, ClienteNotFoundException, DatosIncorrectosException {
         cuentaValidator.validateCuenta(cuentaDto);
         return cuentaService.darDeAltaCuenta(cuentaDto);
     }
@@ -58,7 +56,7 @@ public class CuentaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de cuentas")
     })
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Cuenta> getAllCuentas() {
         return cuentaService.showCuentas();
     }

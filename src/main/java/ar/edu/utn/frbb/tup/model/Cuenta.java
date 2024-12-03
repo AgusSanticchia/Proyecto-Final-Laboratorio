@@ -23,13 +23,13 @@ public class Cuenta {
     public Cuenta(){};
 
     public Cuenta(CuentaDto cuentaDto) {
-        this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.balance = getBalance();
         this.dniTitular = cuentaDto.getDniTitular();
         this.fechaCreacion = LocalDateTime.now();
         this.movimientos = new LinkedList<>();
         this.numeroCuenta = numeroCuenta();
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
+        this.tipoMoneda = TipoMoneda.fromString(cuentaDto.getTipoMoneda());
         this.cbu = generarCbu();
     }
 

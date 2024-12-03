@@ -2,9 +2,9 @@ package ar.edu.utn.frbb.tup.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
-import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.model.exception.clientes.MenorDeEdadException;
-import ar.edu.utn.frbb.tup.model.exception.monedas.TipoMonedaNoSoportadaException;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.clientes.MenorDeEdadException;
+import ar.edu.utn.frbb.tup.exception.monedas.TipoMonedaNoCoincidenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -40,7 +40,7 @@ public class ClienteValidatorTest {
         // TipoPersona debe setearse a 'F' o 'J'
         clienteDto = new ClienteDto("Direccion", "Apellido", 12345678L, "1990-01-01", "Nombre", "123456789", "Banco Test", "X");
 
-        assertThrows(TipoMonedaNoSoportadaException.class, () -> clienteValidator.validate(clienteDto));
+        assertThrows(TipoMonedaNoCoincidenException.class, () -> clienteValidator.validate(clienteDto));
     }
 
     @Test

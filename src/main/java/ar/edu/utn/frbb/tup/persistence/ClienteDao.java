@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.edu.utn.frbb.tup.model.Cliente;
-import ar.edu.utn.frbb.tup.model.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.persistence.entity.ClienteEntity;
 import org.springframework.stereotype.Component;
 
