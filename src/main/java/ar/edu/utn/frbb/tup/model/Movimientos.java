@@ -15,6 +15,7 @@ public class Movimientos {
     private LocalDateTime fecha;
     private TipoMoneda tipoMoneda;
     private TipoOperacion tipoOperacion;
+    private String descripcion;
 
 
     public Movimientos(MovimientosDto movimientosDto) {
@@ -30,35 +31,29 @@ public class Movimientos {
         this.fecha = LocalDateTime.now();
         this.monto = movimientosTransferenciasDto.getMonto();
         this.tipoMoneda = TipoMoneda.fromString(movimientosTransferenciasDto.getTipoMoneda());
+        this.descripcion = movimientosTransferenciasDto.getDescripcion();
     }
 
     public double getMonto() {
         return monto;
     }
-
     public void setMonto(double monto) {
         this.monto = monto;
     }
-
     public long getCuentaOrigen() {
         return cuentaOrigen;
     }
-
     public void setCuentaOrigen(long cuentaOrigen) {
         this.cuentaOrigen = cuentaOrigen;
     }
-
     public TipoMoneda getTipoMoneda() {
         return tipoMoneda;
     }
-
-    public void setTipoOperacion(TipoOperacion tipoOperacion) {
-        this.tipoOperacion = tipoOperacion;
-    }
-
+    public void setTipoOperacion(TipoOperacion tipoOperacion) {this.tipoOperacion = tipoOperacion;}
     public LocalDateTime getFecha() {
         return fecha;
     }
+    public String getDescripcion() {return descripcion;}
 
     @Override
     public boolean equals(Object o) {
@@ -67,7 +62,6 @@ public class Movimientos {
         Movimientos that = (Movimientos) o;
         return Objects.equals(tipoMoneda, that.tipoMoneda);
     }
-
     @Override
     public int hashCode() {
         return Objects.hashCode(tipoMoneda);

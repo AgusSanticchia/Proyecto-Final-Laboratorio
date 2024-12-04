@@ -26,7 +26,7 @@ public class MovimientosService {
     @Autowired
     MovimientosValidator MovimientosValidator;
 
-    public void depositar(MovimientosDto movimientosDto) throws CuentaNotExistException, MonedasIncompatiblesException {
+    public Movimientos depositar(MovimientosDto movimientosDto) throws CuentaNotExistException, MonedasIncompatiblesException {
         Cuenta cuenta = cuentaDao.find(movimientosDto.getNumeroCuenta());
 
         if (cuenta != null) {
@@ -42,27 +42,27 @@ public class MovimientosService {
         } else {
             throw new CuentaNotExistException("El numero de cuenta ingresado no coincide con una cuenta existente");
         }
+        return new Movimientos(movimientosDto);
     }
+
+
     public Movimientos retirar(MovimientosDto retiro) throws  MonedasIncompatiblesException, FondosInsuficientesException, CuentaNotExistException{
         Cuenta cuenta = cuentaDao.find(retiro.getNumeroCuenta());
         if (cuenta == null) {
             throw new CuentaNotExistException("Cuenta no encontrada");
         }
-
         TipoMoneda tipoMonedaRetiro = TipoMoneda.fromString(retiro.getTipoMoneda());
         if (!cuenta.getTipoMoneda().equals(tipoMonedaRetiro)) {
             throw new MonedasIncompatiblesException("Moneda incompatible");
         }
-
         if (cuenta.getBalance() < retiro.getMonto()) {
             throw new FondosInsuficientesException("Fondos insuficientes");
         }
-
         cuenta.setBalance(cuenta.getBalance() - retiro.getMonto());
         cuentaDao.update(cuenta);
-
         return new Movimientos(retiro);
     }
+
 
     public Movimientos transferir(MovimientosTransferenciasDto transferencias) throws CuentaNotExistException,  MonedasIncompatiblesException, FondosInsuficientesException {
         Cuenta cuentaOrigen = cuentaDao.find(transferencias.getCuentaOrigen());
@@ -111,53 +111,53 @@ public class MovimientosService {
         return new Movimientos(transferencias);
     }
 
-private double comision(MovimientosTransferenciasDto transferencia, TipoMoneda tipoMoneda){
-    double monto = transferencia.getMonto();
-    double comision = 0;
+    private double comision(MovimientosTransferenciasDto transferencia, TipoMoneda tipoMoneda){
+        double monto = transferencia.getMonto();
+        double comision = 0;
 
-    // Aplicar comisión según la moneda y monto de transferencia
-    switch (tipoMoneda) {
-        case PESOS -> {
-            if (monto > 1000000) {
-                comision = monto * 0.02; // 2% de comisión si supera $1,000,000
+        // Aplicar comisión según la moneda y monto de transferencia
+        switch (tipoMoneda) {
+            case PESOS -> {
+                if (monto > 1000000) {
+                    comision = monto * 0.02; // 2% de comisión si supera $1,000,000
+                }
+            }
+            case DOLARES -> {
+                if (monto > 5000) {
+                    comision = monto * 0.005; // 0.5% de comisión si supera U$S 5,000
+                }
             }
         }
-        case DOLARES -> {
-            if (monto > 5000) {
-                comision = monto * 0.005; // 0.5% de comisión si supera U$S 5,000
-            }
+        return comision;
+    }
+
+    public void banelcoExterno(MovimientosTransferenciasDto transferencia, Cuenta cuentaOrigen)
+            throws FondosInsuficientesException, CuentaNotExistException {
+
+        // Verificar que la cuenta origen tenga fondos suficientes
+        double comision = comision(transferencia, cuentaOrigen.getTipoMoneda());
+        double montoTotal = transferencia.getMonto() + comision;
+        if (cuentaOrigen.getBalance() < montoTotal) {
+            throw new FondosInsuficientesException("Fondos insuficientes para realizar la transferencia");
+        }
+
+        // Llamar al servicio externo para realizar la transferencia
+        boolean transferenciaExitosa = banelcoService.realizarTransferenciaBanelco(
+                transferencia.getCuentaOrigen(),
+                transferencia.getCuentaDestino(),
+                transferencia.getMonto()
+        );
+
+        if (transferenciaExitosa) {
+            // Actualizar el saldo de la cuenta origen y registrar el movimiento
+            cuentaOrigen.setBalance(cuentaOrigen.getBalance() - montoTotal);
+            Movimientos movimiento = new Movimientos(transferencia);
+            movimiento.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
+            cuentaOrigen.addMovimiento(movimiento);
+            // Guardar las actualizaciones en la base de datos
+            cuentaDao.update(cuentaOrigen);
+        } else {
+            throw new CuentaNotExistException("Transferencia fallida: cuenta destino no encontrada");
         }
     }
-    return comision;
-}
-
-public void banelcoExterno(MovimientosTransferenciasDto transferencia, Cuenta cuentaOrigen)
-        throws FondosInsuficientesException, CuentaNotExistException {
-
-    // Verificar que la cuenta origen tenga fondos suficientes
-    double comision = comision(transferencia, cuentaOrigen.getTipoMoneda());
-    double montoTotal = transferencia.getMonto() + comision;
-    if (cuentaOrigen.getBalance() < montoTotal) {
-        throw new FondosInsuficientesException("Fondos insuficientes para realizar la transferencia");
-    }
-
-    // Llamar al servicio externo para realizar la transferencia
-    boolean transferenciaExitosa = banelcoService.realizarTransferenciaBanelco(
-            transferencia.getCuentaOrigen(),
-            transferencia.getCuentaDestino(),
-            transferencia.getMonto()
-    );
-
-    if (transferenciaExitosa) {
-        // Actualizar el saldo de la cuenta origen y registrar el movimiento
-        cuentaOrigen.setBalance(cuentaOrigen.getBalance() - montoTotal);
-        Movimientos movimiento = new Movimientos(transferencia);
-        movimiento.setTipoOperacion(TipoOperacion.TRANSFERENCIA);
-        cuentaOrigen.addMovimiento(movimiento);
-        // Guardar las actualizaciones en la base de datos
-        cuentaDao.update(cuentaOrigen);
-    } else {
-        throw new CuentaNotExistException("Transferencia fallida: cuenta destino no encontrada");
-    }
-}
 }

@@ -12,28 +12,25 @@ import org.springframework.stereotype.Component;
 public class  MovimientosValidator {
 
   public void validateMovimientos(MovimientosDto movimientosDto) throws DatosIncorrectosException{
-    if (movimientosDto == null) {
-      throw new DatosIncorrectosException("El movimiento no puede ser nulo");
-    }
-    validateMonto(movimientosDto.getMonto());
+      validateDatos(movimientosDto);
   }
 
-  public void validateMovimientosTransferencias(MovimientosTransferenciasDto movimientosTransferenciasDto)
-          throws TipoCuentaNoSoportadaException, DatosIncorrectosException {
-    if (movimientosTransferenciasDto == null) {
-      throw new DatosIncorrectosException("La transferencia no puede ser nula");
-    }
-
-    validateMonto(movimientosTransferenciasDto.getMonto());
-
-    if (movimientosTransferenciasDto.getCuentaOrigen() == movimientosTransferenciasDto.getCuentaDestino()) {
-      throw new TipoCuentaNoSoportadaException("La cuenta origen y destino no pueden ser la misma");
-    }
+  public void validateMovimientosTransferencias(MovimientosTransferenciasDto movimientosTransferenciasDto) {
+      validateDatosTransferencias(movimientosTransferenciasDto);
   }
 
-  private void validateMonto(Double monto) throws DatosIncorrectosException {
-    if (monto == null || monto <= 0.0) {
-      throw new DatosIncorrectosException("El monto debe ser mayor que cero");
-    }
+  private void validateDatosTransferencias(MovimientosTransferenciasDto movimientosTransferenciasDto) {
+      if (movimientosTransferenciasDto.getCuentaDestino() == movimientosTransferenciasDto.getCuentaOrigen()) {throw new IllegalArgumentException("Error: La cuenta de origen y la cuenta de destino son iguales");}
+
+      if (movimientosTransferenciasDto.getMonto() <= 0) {throw new IllegalArgumentException("Error: El monto debe ser mayor que 0");}
+
+      if (movimientosTransferenciasDto.getMonto() == null) {throw new IllegalArgumentException("Error: Ingrese un monto");}
+
+      if (movimientosTransferenciasDto.getCuentaDestino() == 0 || movimientosTransferenciasDto.getCuentaOrigen() == 0) {throw new IllegalArgumentException("Error: La cuenta de origen o la cuenta de destino no pueden ser 0");}
+  }
+
+  private void validateDatos(MovimientosDto movimientosDto) {
+      if (movimientosDto.getMonto() == null) {throw new IllegalArgumentException("Error: Ingrese un monto");}
+      if (movimientosDto.getMonto() <= 0) {throw new IllegalArgumentException("Error: El monto debe ser mayor que 0");}
   }
 }

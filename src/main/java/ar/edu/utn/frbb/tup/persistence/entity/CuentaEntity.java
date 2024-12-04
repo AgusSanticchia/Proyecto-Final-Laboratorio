@@ -8,7 +8,7 @@ import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 
-public class CuentaEntity extends BaseEntity{
+public class    CuentaEntity extends BaseEntity{
     String nombre;
     LocalDateTime fechaCreacion;
     double balance;

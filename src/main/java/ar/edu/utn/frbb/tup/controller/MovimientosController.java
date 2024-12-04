@@ -44,7 +44,7 @@ public class MovimientosController {
             @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/transferencia")
-    public ResponseEntity<Movimientos> transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, TipoCuentaNoSoportadaException, FondosInsuficientesException {
+    public ResponseEntity<Movimientos> transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException,  FondosInsuficientesException {
 
         movimientosValidator.validateMovimientosTransferencias(movimientosDto);
         movimientosService.transferir(movimientosDto);

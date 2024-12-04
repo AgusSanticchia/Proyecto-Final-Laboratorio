@@ -33,81 +33,56 @@ public class Cuenta {
         this.cbu = generarCbu();
     }
 
-    public Cuenta(long dniTitular, double balance, String moneda) {
-    }
+    public Cuenta(long dniTitular, double balance, String moneda) { }
 
     public TipoMoneda getTipoMoneda() {
         return tipoMoneda;
     }
-
     public void setTipoMoneda(TipoMoneda tipoMoneda) {
         this.tipoMoneda = tipoMoneda;
     }
-
     public long getDniTitular() {
         return dniTitular;
     }
-
     public void setDniTitular(long dniTitular) {
         this.dniTitular = dniTitular;
     }
-
     public TipoCuenta getTipoCuenta() {
         return tipoCuenta;
     }
-
     public void setTipoCuenta(TipoCuenta tipoCuenta) {
         this.tipoCuenta = tipoCuenta;
     }
-
     public long getNumeroCuenta() {
         return numeroCuenta;
     }
-
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }
-
     public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
     }
-
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
-
     public String getCbu() {
         return cbu;
     }
-
     public void setCbu(String cbu) {
         this.cbu = cbu;
     }
-
-    public String generarCbu(){
-        StringBuilder cbu = new StringBuilder();
-        for (int i = 0; i < 22; i++) {
-            cbu.append(r.nextInt(10));
-        }
-        return this.cbu = cbu.toString();
-    }
-
     public Double getBalance() {
         return balance;
     }
-
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-
     public LinkedList<Movimientos> getMovimientos() {
         return movimientos;
     }
-
     public void setMovimientos(LinkedList<Movimientos> movimientos) {
         this.movimientos = movimientos;
     }
-
     public void addMovimiento(Movimientos movimiento) {
         this.movimientos.add(movimiento);
     }
@@ -116,7 +91,13 @@ public class Cuenta {
         Random random = new Random();
         return random.nextLong(100 + 1);
     }
-
+    public String generarCbu(){
+        StringBuilder cbu = new StringBuilder();
+        for (int i = 0; i < 22; i++) {
+            cbu.append(r.nextInt(10));
+        }
+        return this.cbu = cbu.toString();
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
