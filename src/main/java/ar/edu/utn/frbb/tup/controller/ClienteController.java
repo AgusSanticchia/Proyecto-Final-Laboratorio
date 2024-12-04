@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +30,26 @@ public class ClienteController {
     @Autowired
     private ClienteValidator clienteValidator;
 
+    @Operation(summary = "Obtener todos los clientes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de clientes")
+    })
+    @GetMapping("/")
+    public ResponseEntity<List<Cliente>> getAllClientes() {
+        List<Cliente> clientes = clienteService.showClientes();
+        return ResponseEntity.ok(clientes);
+    }
+
     @Operation(summary = "Crear un nuevo cliente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cliente creado con éxito"),
             @ApiResponse(responseCode = "400", description = "Error en los datos de entrada")
     })
     @PostMapping
-    public Cliente createCliente(@RequestBody ClienteDto clienteDto) throws DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException, MenorDeEdadException {
+    public ResponseEntity<Cliente> createCliente(@RequestBody ClienteDto clienteDto) throws DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException, MenorDeEdadException {
         clienteValidator.validate(clienteDto);
-        return clienteService.darDeAltaCliente(clienteDto);
+        Cliente cliente = clienteService.darDeAltaCliente(clienteDto);
+        return new ResponseEntity<>(cliente, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtener cliente por DNI")
@@ -47,17 +59,7 @@ public class ClienteController {
     })
 
     @GetMapping("/{dni}")
-    public Cliente getClientById(@Parameter(description = "DNI del cliente a buscar", required = true) @PathVariable long dni) throws ClienteNotFoundException {
-        return clienteService.buscarClientePorDni(dni);
-    }
-
-    @Operation(summary = "Obtener todos los clientes")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de clientes")
-    })
-    @GetMapping("/all")
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = clienteService.showClientes();
-        return ResponseEntity.ok(clientes);
+    public ResponseEntity<Cliente> getClientById(@Parameter(description = "DNI del cliente a buscar", required = true) @PathVariable long dni) throws ClienteNotFoundException {
+        return new  ResponseEntity<>(clienteService.buscarClientePorDni(dni), HttpStatus.OK);
     }
 }

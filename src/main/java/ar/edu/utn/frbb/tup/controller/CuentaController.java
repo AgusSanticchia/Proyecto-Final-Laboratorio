@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +31,15 @@ public class CuentaController {
     @Autowired
     private CuentaValidator cuentaValidator;
 
+    @Operation(summary = "Obtener todas las cuentas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de cuentas")
+    })
+    @GetMapping("/")
+    public List<Cuenta> getAllCuentas() {
+        return cuentaService.showCuentas();
+    }
+
     @Operation(summary = "Crear una nueva cuenta")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cuenta creada con éxito"),
@@ -36,10 +47,10 @@ public class CuentaController {
             @ApiResponse(responseCode = "409", description = "La cuenta ya existe")
     })
     @PostMapping
-    public Cuenta createCuenta(@RequestBody CuentaDto cuentaDto)
+    public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto)
             throws TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, MonedasIncompatiblesException, CuentaNotExistException, ClienteNotFoundException, DatosIncorrectosException {
         cuentaValidator.validateCuenta(cuentaDto);
-        return cuentaService.darDeAltaCuenta(cuentaDto);
+        return new ResponseEntity<>( cuentaService.darDeAltaCuenta(cuentaDto), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtener cuenta por ID")
@@ -48,16 +59,7 @@ public class CuentaController {
             @ApiResponse(responseCode = "404", description = "Cuenta no encontrada")
     })
     @GetMapping("/{idCuenta}")
-    public Cuenta getCuentaById(@Parameter(description = "ID de la cuenta a buscar", required = true) @PathVariable long idCuenta) throws CuentaNotExistException {
-        return cuentaService.findById(idCuenta);
-    }
-
-    @Operation(summary = "Obtener todas las cuentas")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de cuentas")
-    })
-    @GetMapping("/")
-    public List<Cuenta> getAllCuentas() {
-        return cuentaService.showCuentas();
+    public ResponseEntity<Cuenta> getCuentaById(@Parameter(description = "ID de la cuenta a buscar", required = true) @PathVariable long idCuenta) throws CuentaNotExistException {
+        return new ResponseEntity<>(cuentaService.findById(idCuenta), HttpStatus.OK);
     }
 }

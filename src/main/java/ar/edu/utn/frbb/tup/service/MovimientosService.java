@@ -26,24 +26,23 @@ public class MovimientosService {
     @Autowired
     MovimientosValidator MovimientosValidator;
 
-    public Movimientos depositar(MovimientosDto deposito) throws MonedasIncompatiblesException, CuentaNotExistException {
+    public void depositar(MovimientosDto movimientosDto) throws CuentaNotExistException, MonedasIncompatiblesException {
+        Cuenta cuenta = cuentaDao.find(movimientosDto.getNumeroCuenta());
 
-        Cuenta cuenta = cuentaDao.find(deposito.getNumeroCuenta());
-        if (cuenta == null) {
-            System.out.println("Cuenta no encontrada");
+        if (cuenta != null) {
+            Movimientos movimiento = new Movimientos(movimientosDto);
+            if (cuenta.getTipoMoneda().equals(movimiento.getTipoMoneda())) {
+                cuenta.setBalance(cuenta.getBalance() + movimientosDto.getMonto());
+                movimiento.setTipoOperacion(TipoOperacion.DEPOSITO);
+                cuenta.addMovimiento(movimiento);
+                cuentaDao.save(cuenta);
+            } else {
+                throw new MonedasIncompatiblesException("No coinciden las monedas");
+            }
+        } else {
+            throw new CuentaNotExistException("El numero de cuenta ingresado no coincide con una cuenta existente");
         }
-
-        TipoMoneda tipoMonedaDeposito = TipoMoneda.fromString(deposito.getTipoMoneda());
-        if (!cuenta.getTipoMoneda().equals(tipoMonedaDeposito)) {
-            throw new MonedasIncompatiblesException("Moneda incompatible");
-        }
-
-        cuenta.setBalance(cuenta.getBalance() + deposito.getMonto());
-        cuentaDao.save(cuenta);
-
-        return new Movimientos(deposito);
     }
-
     public Movimientos retirar(MovimientosDto retiro) throws  MonedasIncompatiblesException, FondosInsuficientesException, CuentaNotExistException{
         Cuenta cuenta = cuentaDao.find(retiro.getNumeroCuenta());
         if (cuenta == null) {

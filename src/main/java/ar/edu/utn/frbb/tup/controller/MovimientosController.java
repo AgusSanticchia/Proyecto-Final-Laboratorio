@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -42,12 +44,12 @@ public class MovimientosController {
             @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/transferencia")
-    public Movimientos transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, TipoCuentaNoSoportadaException, FondosInsuficientesException {
+    public ResponseEntity<Movimientos> transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, TipoCuentaNoSoportadaException, FondosInsuficientesException {
 
         movimientosValidator.validateMovimientosTransferencias(movimientosDto);
         movimientosService.transferir(movimientosDto);
         Cuenta cuenta = cuentaService.findById(movimientosDto.getCuentaOrigen());
-        return cuenta.getMovimientos().getLast();
+        return new ResponseEntity<>(cuenta.getMovimientos().getLast(), HttpStatus.OK);
     }
 
     @Operation(summary = "Realizar un depósito en la cuenta")
@@ -58,12 +60,12 @@ public class MovimientosController {
             @ApiResponse(responseCode = "409", description = "Monedas incompatibles")
     })
     @PostMapping("/depositos")
-    public Movimientos depositos(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException {
+    public ResponseEntity<Movimientos> depositos(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
         movimientosService.depositar(movimientosDto);
         Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuenta());
-        return cuenta.getMovimientos().getLast();
+        return new ResponseEntity<>(cuenta.getMovimientos().getLast(), HttpStatus.OK);
     }
 
     @Operation(summary = "Realizar un retiro de la cuenta")
@@ -74,12 +76,12 @@ public class MovimientosController {
             @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/retiros")
-    public Movimientos retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, FondosInsuficientesException {
+    public ResponseEntity<Movimientos> retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, FondosInsuficientesException {
 
         movimientosValidator.validateMovimientos(movimientosDto);
         movimientosService.retirar(movimientosDto);
         Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuenta());
-        return cuenta.getMovimientos().getLast();
+        return new ResponseEntity<>(cuenta.getMovimientos().getLast(), HttpStatus.OK);
     }
 
     @Operation(summary = "Obtener movimientos de una cuenta")
