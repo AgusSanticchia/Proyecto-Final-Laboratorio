@@ -44,7 +44,7 @@ public class CuentaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cuenta creada con éxito"),
             @ApiResponse(responseCode = "400", description = "Error en los datos de entrada"),
-            @ApiResponse(responseCode = "409", description = "La cuenta ya existe")
+            @ApiResponse(responseCode = "400", description = "La cuenta ya existe")
     })
     @PostMapping
     public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDto cuentaDto)

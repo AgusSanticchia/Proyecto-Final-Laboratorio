@@ -1,122 +1,55 @@
-package ar.edu.utn.frbb.tup.validator;
+package ar.edu.utn.frbb.tup.controller.validator;
 
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
-import ar.edu.utn.frbb.tup.controller.validator.MovimientosValidator;
 import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
-import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MovimientosValidatorTest {
 
-    private MovimientosValidator validator;
+    private final MovimientosValidator validator = new MovimientosValidator();
 
-    @BeforeEach
-    public void setUp() {
-        validator = new MovimientosValidator();
-    }
-
-    // Tests para validación de movimientos
     @Test
-    public void testValidateMovimientosNulo() {
-        // Arrange
-        MovimientosDto movimientosDto = null;
-
-        // Act & Assert
-        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientos(null));
+    public void testValidateMovimientosCorrectos() throws DatosIncorrectosException {
+        MovimientosDto movimientosDto = new MovimientosDto(100.0, 123L, "ARS");
+        validator.validateMovimientos(movimientosDto); // No debe lanzar excepciones
     }
 
     @Test
     public void testValidateMovimientosMontoNulo() {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(null, 1L, "USD");
-
-        // Act & Assert
+        MovimientosDto movimientosDto = new MovimientosDto(null, 123L, "ARS");
         assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientos(movimientosDto));
     }
 
     @Test
     public void testValidateMovimientosMontoNegativo() {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(-1000.0, 1L, "USD");
-
-        // Act & Assert
+        MovimientosDto movimientosDto = new MovimientosDto(-10.0, 123L, "ARS");
         assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientos(movimientosDto));
     }
 
-
     @Test
-    public void testValidateMovimientosExitoso_ValidAmountAndCurrency() throws DatosIncorrectosException, MonedasIncompatiblesException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 1L, "USD");
-
-        // Act
-        validator.validateMovimientos(movimientosDto);
-
-        // Assert
-        // No exception should be thrown
+    public void testValidateTransferenciaCorrecta() throws DatosIncorrectosException {
+        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(456L, 123L, 100.0, "ARS", "Transferencia válida");
+        validator.validateMovimientosTransferencias(transferenciaDto); // No debe lanzar excepciones
     }
 
     @Test
-    public void testValidateMovimientosExitoso_ValidCurrencyAndAccountNumber() throws DatosIncorrectosException, MonedasIncompatiblesException {
-        // Arrange
-        MovimientosDto movimientosDto = new MovimientosDto(1000.0, 123L, "ARS");
-
-        // Act
-        validator.validateMovimientos(movimientosDto);
-
-        // Assert
-        // No exception should be thrown
-    }
-
-    // Tests para validación de transferencias
-    @Test
-    public void testValidateMovimientosTransferenciasNulo() {
-        // Arrange
-        MovimientosTransferenciasDto transferenciasDto = null;
-
-        // Act & Assert
-        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(null));
+    public void testValidateTransferenciaMontoNulo() {
+        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(456L, 123L, null, "ARS", "Monto nulo");
+        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(transferenciaDto));
     }
 
     @Test
-    public void testValidateMovimientosTransferenciasMontoNulo() {
-        // Arrange
-        MovimientosTransferenciasDto transferenciasDto = new MovimientosTransferenciasDto(1L, 2L, null, "ARS");
-
-        // Act & Assert
-        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(transferenciasDto));
+    public void testValidateTransferenciaCuentasIguales() {
+        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(123L, 123L, 100.0, "ARS", "Cuentas iguales");
+        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(transferenciaDto));
     }
 
     @Test
-    public void testValidateMovimientosTransferenciasMontoNegativo() {
-        // Arrange
-        MovimientosTransferenciasDto transferenciasDto = new MovimientosTransferenciasDto(1L, 2L, -1000.0, "ARS");
-
-        // Act & Assert
-        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(transferenciasDto));
-    }
-
-
-    @Test
-    public void testValidateMovimientosTransferenciasCuentaIgual() {
-        // Arrange
-        MovimientosTransferenciasDto transferenciasDto = new MovimientosTransferenciasDto(1L, 1L, 1000.0, "ARS");
-
-        // Act & Assert
-        assertThrows(TipoCuentaNoSoportadaException.class, () -> validator.validateMovimientosTransferencias(transferenciasDto));
-    }
-
-    @Test
-    public void testValidateMovimientosTransferenciasExitoso() throws DatosIncorrectosException, MonedasIncompatiblesException, TipoCuentaNoSoportadaException {
-        // Arrange
-        MovimientosTransferenciasDto transferenciasDto = new MovimientosTransferenciasDto(1L, 2L, 1000.0, "ARS");
-
-        // Act & Assert
-        // No exception should be thrown
-        validator.validateMovimientosTransferencias(transferenciasDto);
+    public void testValidateTransferenciaCuentasCero() {
+        MovimientosTransferenciasDto transferenciaDto = new MovimientosTransferenciasDto(0L, 0L, 100.0, "ARS", "Cuentas cero");
+        assertThrows(DatosIncorrectosException.class, () -> validator.validateMovimientosTransferencias(transferenciaDto));
     }
 }

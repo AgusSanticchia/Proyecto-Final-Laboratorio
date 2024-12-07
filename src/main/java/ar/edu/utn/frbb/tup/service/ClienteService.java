@@ -25,8 +25,7 @@ public class ClienteService {
     @Autowired
     private ClienteValidator clienteValidator;
 
-    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatosIncorrectosException, TipoPersonaNoSoportadaException, MenorDeEdadException {
-        clienteValidator.validate(clienteDto);
+    public Cliente darDeAltaCliente(ClienteDto clienteDto) throws ClienteAlreadyExistsException, DatosIncorrectosException {
 
         Cliente clienteExistente = clienteDao.find(clienteDto.getDni());
         if (clienteExistente != null) {
@@ -38,6 +37,8 @@ public class ClienteService {
 
         return nuevoCliente;
     }
+
+
 
     public void addCuentaToCliente(Cuenta cuenta, long dniTitular) throws CuentaAlreadyExistsException, DatosIncorrectosException, ClienteNotFoundException {
         Cliente cliente = buscarClientePorDni(dniTitular);

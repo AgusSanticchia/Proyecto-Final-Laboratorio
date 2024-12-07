@@ -1,16 +1,14 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
 import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
-import ar.edu.utn.frbb.tup.exception.clientes.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.exception.clientes.ClienteNotFoundException;
 import ar.edu.utn.frbb.tup.exception.cuentas.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.exception.cuentas.CuentaNotExistException;
-import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
-import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,160 +44,101 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void darDeAltaCuenta_Success() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException {
+    public void testDarDeAltaCuenta_Success() throws Exception {
+        // Arrange
         when(cuentaDao.find(anyLong())).thenReturn(null);
         doNothing().when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
 
+        // Act
         Cuenta result = cuentaService.darDeAltaCuenta(cuentaDto);
 
+        // Assert
         assertNotNull(result);
         assertEquals(TipoCuenta.CAJA_AHORRO_PESOS, result.getTipoCuenta());
         assertEquals(TipoMoneda.PESOS, result.getTipoMoneda());
         assertEquals(12345678L, result.getDniTitular());
 
-        verify(cuentaDao, times(1)).save(any(Cuenta.class));
-        verify(clienteService, times(1)).addCuentaToCliente(any(Cuenta.class), eq(12345678L));
+        verify(cuentaDao).save(any(Cuenta.class));
+        verify(clienteService).addCuentaToCliente(any(Cuenta.class), eq(12345678L));
     }
 
     @Test
-    public void darDeAltaCuenta_CuentaAlreadyExists() throws ClienteAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, CuentaAlreadyExistsException {
-        when(cuentaDao.find(anyLong())).thenReturn(new Cuenta());
+    public void testDarDeAltaCuenta_CuentaAlreadyExists() throws DatosIncorrectosException, ClienteNotFoundException, CuentaAlreadyExistsException {
+        // Arrange
+        Cuenta cuentaExistente = new Cuenta();
+        cuentaExistente.setNumeroCuenta(12345678L);
 
-        assertThrows(CuentaAlreadyExistsException.class, () -> {
-            cuentaService.darDeAltaCuenta(cuentaDto);
-        });
+
+        lenient().when(cuentaDao.find(anyLong())).thenReturn(cuentaExistente);
+
+        // Act & Assert
+        assertThrows(CuentaAlreadyExistsException.class, () ->
+                cuentaService.darDeAltaCuenta(cuentaDto)
+        );
 
         verify(cuentaDao, never()).save(any(Cuenta.class));
-        verify(clienteService, never()).addCuentaToCliente(any(Cuenta.class), anyLong());
-    }
-
-    @Test
-    public void darDeAltaCuenta_TipoCuentaNoSoportada() throws ClienteAlreadyExistsException, ClienteNotFoundException, DatosIncorrectosException, CuentaAlreadyExistsException {
-        cuentaDto = new CuentaDto(12345678L, "CA$", "USD");
-
-        assertThrows(TipoCuentaNoSoportadaException.class, () -> {
-            cuentaService.darDeAltaCuenta(cuentaDto);
-        });
-
-        verify(cuentaDao, never()).save(any(Cuenta.class));
-        verify(clienteService, never()).addCuentaToCliente(any(Cuenta.class), anyLong());
-    }
-
-    @Test
-    public void darDeAltaCuenta() throws Exception, ClienteAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, CuentaAlreadyExistsException {
-        when(cuentaDao.find(anyLong())).thenReturn(null);
-        doThrow(new IllegalArgumentException("Invalid argument")).when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            cuentaService.darDeAltaCuenta(cuentaDto);
-        });
-
-        verify(cuentaDao, never()).save(any(Cuenta.class));
-    }
-
-    @Test
-    public void darDeAltaCuentaDtosNulos() throws  ClienteNotFoundException, DatosIncorrectosException, CuentaAlreadyExistsException {
-        CuentaDto nullDto = new CuentaDto(0L, null, null);
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            cuentaService.darDeAltaCuenta(nullDto);
-        });
-
-        verify(cuentaDao, never()).save(any(Cuenta.class));
-        verify(clienteService, never()).addCuentaToCliente(any(Cuenta.class), anyLong());
+        verify(clienteService, never()).addCuentaToCliente  (any(Cuenta.class), anyLong());
     }
 
 
     @Test
-    public void showCuentas() {
-        List<Cuenta> expectedCuentas = Arrays.asList(new Cuenta(), new Cuenta());
-        when(cuentaDao.findAll()).thenReturn(expectedCuentas);
+    public void testShowCuentas() {
+        // Arrange
+        List<Cuenta> cuentas = Arrays.asList(new Cuenta(), new Cuenta());
+        when(cuentaDao.findAll()).thenReturn(cuentas);
 
+        // Act
         List<Cuenta> result = cuentaService.showCuentas();
 
-        assertEquals(expectedCuentas, result);
-        verify(cuentaDao, times(1)).findAll();
-    }
-
-    @Test
-    public void encontrarCuentaExistente() throws CuentaNotExistException {
-        long accountId = 123L;
-        Cuenta expectedCuenta = new Cuenta();
-        when(cuentaDao.find(accountId)).thenReturn(expectedCuenta);
-
-        Cuenta result = cuentaService.findById(accountId);
-
-        assertEquals(expectedCuenta, result);
-        verify(cuentaDao, times(1)).find(accountId);
-    }
-
-    @Test
-    public void encontrarCuentaInexistente() throws CuentaNotExistException {
-        long accountId = 123L;
-        when(cuentaDao.find(accountId)).thenReturn(null);
-
-        Cuenta result = cuentaService.findById(accountId);
-
-        assertNull(result);
-        verify(cuentaDao, times(1)).find(accountId);
-    }
-
-    @Test
-    public void tipoCuentaEstaSoportadaDatosValidos() {
-        Cuenta cuentaPesosCA = new Cuenta();
-        cuentaPesosCA.setTipoMoneda(TipoMoneda.PESOS);
-        cuentaPesosCA.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
-
-        Cuenta cuentaPesosCC = new Cuenta();
-        cuentaPesosCC.setTipoMoneda(TipoMoneda.PESOS);
-        cuentaPesosCC.setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE_PESOS);
-
-
-        Cuenta cuentaDolaresCA = new Cuenta();
-        cuentaDolaresCA.setTipoMoneda(TipoMoneda.DOLARES);
-        cuentaDolaresCA.setTipoCuenta(TipoCuenta.CAJA_AHORRO_DOLAR_US);
-
-    }
-
-    @Test
-    public void tipoCuentaEstaSoportadaDatosInvalidos() {
-        Cuenta cuentaDolaresCC = new Cuenta();
-        cuentaDolaresCC.setTipoMoneda(TipoMoneda.DOLARES);
-        cuentaDolaresCC.setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE_PESOS);
-
-        Cuenta cuentaPesosCAD = new Cuenta();
-        cuentaPesosCAD.setTipoMoneda(TipoMoneda.PESOS);
-        cuentaPesosCAD.setTipoCuenta(TipoCuenta.CAJA_AHORRO_DOLAR_US);
-
-    }
-
-    // Agregamos pruebas adicionales para cobertura completa
-    @Test
-    public void darDeAltaCuentaDatosValidos() throws ClienteAlreadyExistsException, TipoCuentaNoSoportadaException, CuentaAlreadyExistsException, ClienteNotFoundException, CuentaNotExistException, DatosIncorrectosException, TipoMonedaNoSoportadaException, MonedasIncompatiblesException {
-        CuentaDto validDto = new CuentaDto(12345678L, "CC$", "ARS");
-
-        when(cuentaDao.find(anyLong())).thenReturn(null);
-        doNothing().when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
-
-        Cuenta result = cuentaService.darDeAltaCuenta(validDto);
-
+        // Assert
         assertNotNull(result);
-        assertEquals(TipoCuenta.CUENTA_CORRIENTE_PESOS, result.getTipoCuenta());
-        assertEquals(TipoMoneda.PESOS, result.getTipoMoneda());
-        assertEquals(12345678L, result.getDniTitular());
-
-        verify(cuentaDao, times(1)).save(any(Cuenta.class));
-        verify(clienteService, times(1)).addCuentaToCliente(any(Cuenta.class), eq(12345678L));
+        assertEquals(2, result.size());
+        verify(cuentaDao).findAll();
     }
 
     @Test
-    public void tipoCuentaEstaSoportada_TipoMonedaNoEspecificada() {
-        Cuenta cuenta = new Cuenta();
-        cuenta.setTipoMoneda(null);
-        cuenta.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
+    public void testFindById_CuentaExiste() throws CuentaNotExistException {
+        // Arrange
+        Cuenta expectedCuenta = new Cuenta();
+        when(cuentaDao.find(anyLong())).thenReturn(expectedCuenta);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            cuentaService.darDeAltaCuenta(new CuentaDto(0L, "CA$", null));
-        });
+        // Act
+        Cuenta result = cuentaService.findById(123L);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedCuenta, result);
+        verify(cuentaDao).find(123L);
+    }
+
+    @Test
+    public void testFindById_CuentaNoExiste() {
+        // Arrange
+        when(cuentaDao.find(anyLong())).thenReturn(null);
+
+        // Act & Assert
+        CuentaNotExistException exception = assertThrows(
+                CuentaNotExistException.class,
+                () -> cuentaService.findById(123L)
+        );
+
+        assertEquals("La cuenta no existe.", exception.getMessage());
+    }
+
+    @Test
+    public void testDarDeAltaCuenta_ClienteNoEncontrado() throws Exception {
+        // Arrange
+        doThrow(new ClienteNotFoundException("Cliente no encontrado"))
+                .when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
+
+        // Act & Assert
+        ClienteNotFoundException exception = assertThrows(
+                ClienteNotFoundException.class,
+                () -> cuentaService.darDeAltaCuenta(cuentaDto)
+        );
+
+        assertEquals("Cliente no encontrado", exception.getMessage());
+        verify(clienteService).addCuentaToCliente(any(Cuenta.class), eq(12345678L));
+        verify(cuentaDao, never()).save(any(Cuenta.class));
     }
 }

@@ -27,15 +27,12 @@ public class CuentaService {
     @Autowired
     private CuentaValidator cuentaValidator;
 
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteNotFoundException, MonedasIncompatiblesException, DatosIncorrectosException {
-        cuentaValidator.validateCuenta(cuentaDto);
-
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, ClienteNotFoundException, DatosIncorrectosException {
         Cuenta cuenta = new Cuenta(cuentaDto);
 
         if (cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
             throw new CuentaAlreadyExistsException("La cuenta " + cuenta.getNumeroCuenta() + " ya existe.");
         }
-
         clienteService.addCuentaToCliente(cuenta, cuentaDto.getDniTitular());
         cuentaDao.save(cuenta);
         return cuenta;

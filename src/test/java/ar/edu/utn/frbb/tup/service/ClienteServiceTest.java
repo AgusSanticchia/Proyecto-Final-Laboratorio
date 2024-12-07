@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
+import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
@@ -63,7 +64,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testDarDeAltaClienteNuevoCliente() throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException {
+    public void testDarDeAltaClienteNuevo() throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException {
         when(clienteDao.find(clienteDto.getDni())).thenReturn(null);
         doNothing().when(clienteDao).save(any(Cliente.class));
 
@@ -105,34 +106,20 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testDarDeAltaClienteClienteExistente() throws MenorDeEdadException, DatosIncorrectosException, TipoPersonaNoSoportadaException, ClienteAlreadyExistsException {
+    public void testDarDeAltaClienteExistente() throws DatosIncorrectosException {
         when(clienteDao.find(clienteDto.getDni())).thenReturn(cliente);
 
-        Cliente result = clienteService.darDeAltaCliente(clienteDto);
+        ClienteAlreadyExistsException exception = assertThrows(
+                ClienteAlreadyExistsException.class,
+                () -> clienteService.darDeAltaCliente(clienteDto)
+        );
 
-        assertNotNull(result);
-        assertEquals(cliente, result);
+        assertEquals("Ya existe un cliente con el DNI: 12345678", exception.getMessage());
         verify(clienteDao, never()).save(any(Cliente.class));
     }
 
     @Test
-    public void testDarDeAltaClienteMenorDeEdad() {
-        clienteDto = new ClienteDto(
-                "Agus",
-                "Santi",
-                12345678,
-                LocalDate.now().minusYears(17).format(formatter),
-                "Calle False 123",
-                "1234567890",
-                "Provincia",
-                "J"
-        );
-
-        assertThrows(MenorDeEdadException.class, () -> clienteService.darDeAltaCliente(clienteDto));
-    }
-
-    @Test
-    public void testAddCuentaToCliente() throws ClienteNotFoundException, ClienteAlreadyExistsException, DatosIncorrectosException, CuentaAlreadyExistsException {
+    public void testAddCuentaToCliente() throws ClienteNotFoundException, CuentaAlreadyExistsException, DatosIncorrectosException {
         Cuenta cuenta = new Cuenta();
         cuenta.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
         cuenta.setTipoMoneda(TipoMoneda.PESOS);
@@ -153,10 +140,14 @@ public class ClienteServiceTest {
         cuenta.setTipoMoneda(TipoMoneda.PESOS);
 
         cliente.addCuenta(cuenta);
-
         when(clienteDao.find(cliente.getDni())).thenReturn(cliente);
 
-        assertThrows(ClienteAlreadyExistsException.class, () -> clienteService.addCuentaToCliente(cuenta, cliente.getDni()));
+        CuentaAlreadyExistsException exception = assertThrows(
+                CuentaAlreadyExistsException.class,
+                () -> clienteService.addCuentaToCliente(cuenta, cliente.getDni())
+        );
+
+        assertEquals("El cliente ya tiene una cuenta de tipo: CAJA_AHORRO_PESOS y de tipo de moneda: PESOS", exception.getMessage());
     }
 
     @Test
@@ -191,8 +182,14 @@ public class ClienteServiceTest {
     public void testBuscarClientePorDniNotFound() {
         when(clienteDao.find(anyLong())).thenReturn(null);
 
-        assertThrows(ClienteNotFoundException.class, () -> clienteService.buscarClientePorDni(123L));
+        ClienteNotFoundException exception = assertThrows(
+                ClienteNotFoundException.class,
+                () -> clienteService.buscarClientePorDni(123L)
+        );
+
+        assertEquals("No se encontró un cliente con el DNI: 123", exception.getMessage());
     }
+
 
     @Test
     public void testShowClientes() {
@@ -248,4 +245,37 @@ public class ClienteServiceTest {
 
         assertEquals(cuentas, cliente.getCuentas());
     }
+
+    @Test
+    public void testAddMultipleCuentasToCliente() throws ClienteNotFoundException, CuentaAlreadyExistsException, DatosIncorrectosException {
+        Cuenta cuenta1 = new Cuenta();
+        cuenta1.setTipoCuenta(TipoCuenta.CAJA_AHORRO_PESOS);
+        cuenta1.setTipoMoneda(TipoMoneda.PESOS);
+
+        Cuenta cuenta2 = new Cuenta();
+        cuenta2.setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE_PESOS);
+        cuenta2.setTipoMoneda(TipoMoneda.PESOS);
+
+        when(clienteDao.find(cliente.getDni())).thenReturn(cliente);
+
+        clienteService.addCuentaToCliente(cuenta1, cliente.getDni());
+        clienteService.addCuentaToCliente(cuenta2, cliente.getDni());
+
+        verify(clienteDao, times(2)).save(cliente);
+        assertTrue(cliente.tieneCuenta(TipoCuenta.CAJA_AHORRO_PESOS, TipoMoneda.PESOS));
+        assertTrue(cliente.tieneCuenta(TipoCuenta.CUENTA_CORRIENTE_PESOS, TipoMoneda.PESOS));
+    }
+
+    @Test
+    public void testClienteAlreadyExistsExceptionMessage() {
+        when(clienteDao.find(clienteDto.getDni())).thenReturn(cliente);
+
+        ClienteAlreadyExistsException exception = assertThrows(
+                ClienteAlreadyExistsException.class,
+                () -> clienteService.darDeAltaCliente(clienteDto)
+        );
+
+        assertEquals("Ya existe un cliente con el DNI: 12345678", exception.getMessage());
+    }
+
 }

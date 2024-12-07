@@ -41,7 +41,7 @@ public class MovimientosController {
             @ApiResponse(responseCode = "200", description = "Transferencia realizada con éxito"),
             @ApiResponse(responseCode = "400", description = "Error en los datos de entrada"),
             @ApiResponse(responseCode = "404", description = "Cuenta no encontrada"),
-            @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
+            @ApiResponse(responseCode = "400", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/transferencia")
     public ResponseEntity<Movimientos> transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException,  FondosInsuficientesException {
@@ -57,7 +57,7 @@ public class MovimientosController {
             @ApiResponse(responseCode = "200", description = "Depósito realizado con éxito"),
             @ApiResponse(responseCode = "400", description = "Error en los datos de entrada"),
             @ApiResponse(responseCode = "404", description = "Cuenta no encontrada"),
-            @ApiResponse(responseCode = "409", description = "Monedas incompatibles")
+            @ApiResponse(responseCode = "400", description = "Monedas incompatibles")
     })
     @PostMapping("/depositos")
     public ResponseEntity<Movimientos> depositos(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException {
@@ -73,7 +73,7 @@ public class MovimientosController {
             @ApiResponse(responseCode = "200", description = "Retiro realizado con éxito"),
             @ApiResponse(responseCode = "400", description = "Error en los datos de entrada"),
             @ApiResponse(responseCode = "404", description = "Cuenta no encontrada"),
-            @ApiResponse(responseCode = "409", description = "Fondos insuficientes o monedas incompatibles")
+            @ApiResponse(responseCode = "400", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/retiros")
     public ResponseEntity<Movimientos> retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, FondosInsuficientesException {
