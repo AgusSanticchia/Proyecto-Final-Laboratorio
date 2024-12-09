@@ -36,9 +36,11 @@ public class CuentaController {
             @ApiResponse(responseCode = "200", description = "Lista de cuentas")
     })
     @GetMapping("/")
-    public List<Cuenta> getAllCuentas() {
-        return cuentaService.showCuentas();
+    public ResponseEntity<List<Cuenta>> getAllCuentas() {
+        List<Cuenta> cuentas = cuentaService.showCuentas();
+        return ResponseEntity.ok(cuentas);
     }
+
 
     @Operation(summary = "Crear una nueva cuenta")
     @ApiResponses(value = {

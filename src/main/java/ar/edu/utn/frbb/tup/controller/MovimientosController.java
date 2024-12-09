@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/movimientos")
@@ -45,7 +46,6 @@ public class MovimientosController {
     })
     @PostMapping("/transferencia")
     public ResponseEntity<Movimientos> transferencia(@RequestBody MovimientosTransferenciasDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException,  FondosInsuficientesException {
-
         movimientosValidator.validateMovimientosTransferencias(movimientosDto);
         movimientosService.transferir(movimientosDto);
         Cuenta cuenta = cuentaService.findById(movimientosDto.getCuentaOrigen());
@@ -76,12 +76,11 @@ public class MovimientosController {
             @ApiResponse(responseCode = "400", description = "Fondos insuficientes o monedas incompatibles")
     })
     @PostMapping("/retiros")
-    public ResponseEntity<Movimientos> retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, MonedasIncompatiblesException, CuentaNotExistException, FondosInsuficientesException {
-
+    public ResponseEntity<Movimientos> retiros(@RequestBody MovimientosDto movimientosDto) throws DatosIncorrectosException, CuentaNotExistException, FondosInsuficientesException, MonedasIncompatiblesException {
         movimientosValidator.validateMovimientos(movimientosDto);
         movimientosService.retirar(movimientosDto);
         Cuenta cuenta = cuentaService.findById(movimientosDto.getNumeroCuenta());
-        return new ResponseEntity<>(cuenta.getMovimientos().getLast(), HttpStatus.OK);
+        return ResponseEntity.ok(cuenta.getMovimientos().getLast());
     }
 
     @Operation(summary = "Obtener movimientos de una cuenta")

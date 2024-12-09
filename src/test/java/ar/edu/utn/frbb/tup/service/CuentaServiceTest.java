@@ -1,7 +1,6 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
-import ar.edu.utn.frbb.tup.controller.validator.CuentaValidator;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.enums.TipoMoneda;
@@ -64,14 +63,12 @@ public class CuentaServiceTest {
 
     @Test
     public void testDarDeAltaCuenta_CuentaAlreadyExists() throws DatosIncorrectosException, ClienteNotFoundException, CuentaAlreadyExistsException {
-        // Arrange
         Cuenta cuentaExistente = new Cuenta();
         cuentaExistente.setNumeroCuenta(12345678L);
 
 
         lenient().when(cuentaDao.find(anyLong())).thenReturn(cuentaExistente);
 
-        // Act & Assert
         assertThrows(CuentaAlreadyExistsException.class, () ->
                 cuentaService.darDeAltaCuenta(cuentaDto)
         );
@@ -83,14 +80,11 @@ public class CuentaServiceTest {
 
     @Test
     public void testShowCuentas() {
-        // Arrange
         List<Cuenta> cuentas = Arrays.asList(new Cuenta(), new Cuenta());
         when(cuentaDao.findAll()).thenReturn(cuentas);
 
-        // Act
         List<Cuenta> result = cuentaService.showCuentas();
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(cuentaDao).findAll();
@@ -98,14 +92,11 @@ public class CuentaServiceTest {
 
     @Test
     public void testFindById_CuentaExiste() throws CuentaNotExistException {
-        // Arrange
         Cuenta expectedCuenta = new Cuenta();
         when(cuentaDao.find(anyLong())).thenReturn(expectedCuenta);
 
-        // Act
         Cuenta result = cuentaService.findById(123L);
 
-        // Assert
         assertNotNull(result);
         assertEquals(expectedCuenta, result);
         verify(cuentaDao).find(123L);
@@ -113,10 +104,8 @@ public class CuentaServiceTest {
 
     @Test
     public void testFindById_CuentaNoExiste() {
-        // Arrange
         when(cuentaDao.find(anyLong())).thenReturn(null);
 
-        // Act & Assert
         CuentaNotExistException exception = assertThrows(
                 CuentaNotExistException.class,
                 () -> cuentaService.findById(123L)
@@ -127,11 +116,10 @@ public class CuentaServiceTest {
 
     @Test
     public void testDarDeAltaCuenta_ClienteNoEncontrado() throws Exception {
-        // Arrange
+
         doThrow(new ClienteNotFoundException("Cliente no encontrado"))
                 .when(clienteService).addCuentaToCliente(any(Cuenta.class), anyLong());
 
-        // Act & Assert
         ClienteNotFoundException exception = assertThrows(
                 ClienteNotFoundException.class,
                 () -> cuentaService.darDeAltaCuenta(cuentaDto)

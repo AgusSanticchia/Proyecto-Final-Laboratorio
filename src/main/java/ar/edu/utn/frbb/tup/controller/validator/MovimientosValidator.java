@@ -3,6 +3,7 @@ package ar.edu.utn.frbb.tup.controller.validator;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosDto;
 import ar.edu.utn.frbb.tup.controller.dto.MovimientosTransferenciasDto;
 import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
+import ar.edu.utn.frbb.tup.exception.cuentas.CuentaNotExistException;
 import org.springframework.stereotype.Component;
 
 @Component

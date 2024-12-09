@@ -1,7 +1,6 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.dto.ClienteDto;
-import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
@@ -159,6 +158,7 @@ public class ClienteServiceTest {
         assertNotNull(result);
         assertEquals(cliente, result);
     }
+
     @Test
     void testToString() {
         String expectedString = "Cliente{" +

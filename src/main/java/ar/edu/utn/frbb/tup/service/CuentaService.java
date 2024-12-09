@@ -27,7 +27,7 @@ public class CuentaService {
     @Autowired
     private CuentaValidator cuentaValidator;
 
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, ClienteNotFoundException, DatosIncorrectosException {
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaNoSoportadaException, ClienteNotFoundException, MonedasIncompatiblesException, DatosIncorrectosException  {
         Cuenta cuenta = new Cuenta(cuentaDto);
 
         if (cuentaDao.find(cuenta.getNumeroCuenta()) != null) {

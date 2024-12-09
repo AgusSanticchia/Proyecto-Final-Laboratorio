@@ -5,14 +5,12 @@ public class MovimientosTransferenciasDto {
     private long cuentaOrigen;
     private long cuentaDestino;
     private String tipoMoneda;
-    private String descripcion;
 
-    public MovimientosTransferenciasDto(long cuentaDestino, long cuentaOrigen, Double monto, String tipoMoneda, String descripcion) {
+    public MovimientosTransferenciasDto(long cuentaDestino, long cuentaOrigen, Double monto, String tipoMoneda) {
         this.cuentaDestino = cuentaDestino;
         this.cuentaOrigen = cuentaOrigen;
         this.monto = monto;
         this.tipoMoneda = tipoMoneda;
-        this.descripcion = descripcion;
     }
 
     public Double getMonto() {
@@ -27,5 +25,4 @@ public class MovimientosTransferenciasDto {
     public String getTipoMoneda() {
         return tipoMoneda;
     }
-    public String getDescripcion() { return descripcion; }
 }

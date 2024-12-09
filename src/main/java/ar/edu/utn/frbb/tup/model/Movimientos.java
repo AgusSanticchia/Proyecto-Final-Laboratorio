@@ -15,8 +15,6 @@ public class Movimientos {
     private LocalDateTime fecha;
     private TipoMoneda tipoMoneda;
     private TipoOperacion tipoOperacion;
-    private String descripcion;
-
 
     public Movimientos(MovimientosDto movimientosDto) {
         this.monto = movimientosDto.getMonto();
@@ -31,8 +29,9 @@ public class Movimientos {
         this.fecha = LocalDateTime.now();
         this.monto = movimientosTransferenciasDto.getMonto();
         this.tipoMoneda = TipoMoneda.fromString(movimientosTransferenciasDto.getTipoMoneda());
-        this.descripcion = movimientosTransferenciasDto.getDescripcion();
     }
+
+    public Movimientos() {}
 
     public double getMonto() {
         return monto;
@@ -53,7 +52,6 @@ public class Movimientos {
     public LocalDateTime getFecha() {
         return fecha;
     }
-    public String getDescripcion() {return descripcion;}
 
     @Override
     public boolean equals(Object o) {

@@ -52,11 +52,12 @@ public class ClienteValidator {
         }
     }
 
-    private void validateTipoPersona(ClienteDto clienteDto) throws TipoPersonaNoSoportadaException {
-        if (!"F".equals(clienteDto.getTipoPersona()) && !"J".equals(clienteDto.getTipoPersona())) {
-            throw new TipoPersonaNoSoportadaException("El tipo de persona no es correcto. Debe ser 'F' o 'J'.");
+    private void validateTipoPersona(ClienteDto clienteDto) throws DatosIncorrectosException {
+        if (!clienteDto.getTipoPersona().equals("F") && !clienteDto.getTipoPersona().equals("J")) {
+            throw new DatosIncorrectosException("El tipo de persona no es correcto. Debe ser 'F' o 'J'.");
         }
     }
+
 
     private void validateFechaDeNacimiento(ClienteDto clienteDto) throws DatosIncorrectosException {
         try {

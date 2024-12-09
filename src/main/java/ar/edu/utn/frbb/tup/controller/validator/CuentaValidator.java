@@ -1,5 +1,6 @@
 package ar.edu.utn.frbb.tup.controller.validator;
 
+import ar.edu.utn.frbb.tup.exception.DatosIncorrectosException;
 import ar.edu.utn.frbb.tup.exception.monedas.MonedasIncompatiblesException;
 import ar.edu.utn.frbb.tup.exception.cuentas.TipoCuentaNoSoportadaException;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,7 @@ import ar.edu.utn.frbb.tup.controller.dto.CuentaDto;
 @Component
 public class CuentaValidator {
 
-    public void validateCuenta(CuentaDto cuentaDto) throws TipoCuentaNoSoportadaException, MonedasIncompatiblesException {
+    public void validateCuenta(CuentaDto cuentaDto) throws DatosIncorrectosException, TipoCuentaNoSoportadaException, MonedasIncompatiblesException {
         validateDatostosCuenta(cuentaDto);
         validateMonedaCompatibilidad(cuentaDto);
     }
@@ -22,6 +23,11 @@ public class CuentaValidator {
         if (cuentaDto.getDniTitular() == 0) throw new IllegalArgumentException("Error: Ingrese un dni");
 
         if (cuentaDto.getDniTitular() < 10000000 || cuentaDto.getDniTitular() > 99999999) throw new IllegalArgumentException("Error: El dni debe tener 8 digitos");
+
+        String tipoCuenta = cuentaDto.getTipoCuenta();
+        if (!tipoCuenta.equals("CC$") && !tipoCuenta.equals("CAU$S") && !tipoCuenta.equals("CA$")) {
+            throw new TipoCuentaNoSoportadaException("Error: Tipo de cuenta no soportado");
+        }
     }
 
     private void validateMonedaCompatibilidad(CuentaDto cuentaDto) throws MonedasIncompatiblesException {
