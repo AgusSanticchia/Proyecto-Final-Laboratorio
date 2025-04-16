@@ -1,65 +1,64 @@
-# tup2024
-Proyecto Final Laboratorio III 
-Simulacion de Banco con Servicio Externo usando Java, Springboot, Junit + Mockito Swagger y Maven
+# Proyecto Final - Simulación de Banco
 
-Para correr la app: mvn spring-boot:run
+Este proyecto simula un sistema bancario y fue desarrollado como trabajo final para la materia **Laboratorio III**. El sistema permite la gestión de clientes, cuentas y movimientos bancarios como depósitos, extracciones y transferencias. Ademas, implementa validaciones, control de errores y pruebas unitarias.
 
-Acceso a la API a través de Swagger: http://localhost:8080/swagger-ui/index.html
+## Tecnologías Utilizadas
 
-## POST /api/cliente
- Para crear un cliente se deben pasar los siguientes datos:
- {
-  "nombre": "string",
-  "apellido": "string",
-  "dni": 0,
-  "fechaNacimiento": "string",  //Debe estar en formato yyyy-MM-dd
-  "telefono": "string",
-  "direccion": "string",
-  "tipoPersona": "string"  //(F o J)
-  "banco": "string"
-}
+- Java 17
+- Spring Boot
+- Maven
+- Swagger
+- JUnit 5 + Mockito
+- Postman (para pruebas manuales)
 
-## GET /api/cliente/
-Se obtiene la lista de todos los clientes
+## Requisitos
 
-## GET /api/cliente/{dni} 
-Para obtener un cliente solo se debe pasar el dni del mismo
+- Java 17+
+- Maven 3.8+
 
-## POST /api/cuenta/
-Paraa crear una cuneta se deben pasar los siguientes parametros
-{
-  "dniTitular": 0,
-  "tipoCuenta": "string", // CC$ (CUENTA_CORRIENTE_PESOS), CA$ (CAJA_AHORRO_PESOS), CAU$S (CAJA_AHORRO_DOLAR_US)
-  "tipoMoneda": "string" // ARS o USD
-}
+## Cómo Ejecutar la Aplicación
 
-## GET /api/cuenta/{idCuenta} 
-Para obtener la cuenta y su titular solo se debe pasar el dni del mismo
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/AgusSanticchia/Proyecto-Final-Laboratorio.git
+   ```
 
-## GET /api/cuentas/
-Se obtiene la lista de todos las cuentas
+2. Entra en el directorio del proyecto:
+   ```bash
+   cd Proyecto-Final-Laboratorio
+   ```
 
-## POST /api/movimientos/depositos
-Para realizar un deposito se deben pasar los siguientes parametros
-{
-  "monto": 0,
-  "tipoMoneda": "string",
-  "numeroCuenta": 0
-}
+3. Ejecute la aplicación:
+   ```bash
+   mvn spring-boot:run
+   ```
 
-## GET /api/movimientos/retiros
-Para realizar un retiro se deben pasar los siguientes parametros
-{
-  "monto": 0,
-  "tipoMoneda": "string",
-  "numeroCuenta": 0
-}
+Una vez que el proyecto esta en ejecución, accede a Swagger para probar los endpoints desde el navegador:
+http://localhost:8080/swagger-ui/index.html
 
-## GET /api/movimientos/transferencia
-Por ultimo para realizar una transferencia se deben pasar los siguientes parametros
-{
-  "monto": 0,
-  "cuentaOrigen": 0,
-  "cuentaDestino": 0,
-  "tipoMoneda": "string"
-}
+## Endpoints Principales
+
+### Cliente
+
+- POST /api/cliente â€“ Crear un cliente
+- GET /api/cliente/ â€“ Listar todos los clientes
+- GET /api/cliente/{dni} â€“ Buscar cliente por DNI
+
+### Cuenta
+
+- POST /api/cuenta â€“ Crear una cuenta para un cliente
+- GET /api/cuenta/{cbu} â€“ Buscar cuenta por CBU
+- GET /api/cuenta/cliente/{dni} â€“ Listar cuentas de un cliente
+
+### Movimientos
+
+- POST /api/movimientos/deposito â€“ Depositar dinero
+- POST /api/movimientos/extraccion â€“ Retirar dinero
+- POST /api/movimientos/transferencia â€“ Transferir entre cuentas
+
+## Pruebas
+
+Para ejecutar las pruebas unitarias:
+```bash
+mvn test
+```
