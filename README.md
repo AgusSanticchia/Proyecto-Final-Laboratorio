@@ -40,21 +40,21 @@ http://localhost:8080/swagger-ui/index.html
 
 ### Cliente
 
-- POST /api/cliente â€“ Crear un cliente
-- GET /api/cliente/ â€“ Listar todos los clientes
-- GET /api/cliente/{dni} â€“ Buscar cliente por DNI
+- POST /api/cliente  Crear un cliente
+- GET /api/cliente/  Listar todos los clientes
+- GET /api/cliente/{dni}  Buscar cliente por DNI
 
 ### Cuenta
 
-- POST /api/cuenta â€“ Crear una cuenta para un cliente
-- GET /api/cuenta/{cbu} â€“ Buscar cuenta por CBU
-- GET /api/cuenta/cliente/{dni} â€“ Listar cuentas de un cliente
+- POST /api/cuenta  Crear una cuenta para un cliente
+- GET /api/cuenta/{cbu}  Buscar cuenta por CBU
+- GET /api/cuenta/cliente/{dni}  Listar cuentas de un cliente
 
 ### Movimientos
 
-- POST /api/movimientos/deposito â€“ Depositar dinero
-- POST /api/movimientos/extraccion â€“ Retirar dinero
-- POST /api/movimientos/transferencia â€“ Transferir entre cuentas
+- POST /api/movimientos/deposito  Depositar dinero
+- POST /api/movimientos/extraccion  Retirar dinero
+- POST /api/movimientos/transferencia  Transferir entre cuentas
 
 ## Pruebas
 
