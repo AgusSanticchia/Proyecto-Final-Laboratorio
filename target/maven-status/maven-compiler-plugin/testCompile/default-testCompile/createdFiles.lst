@@ -1,0 +1,9 @@
+ar\edu\utn\frbb\tup\controller\validator\MovimientosValidatorTest.class
+ar\edu\utn\frbb\tup\controller\MovimientosControllerTest.class
+ar\edu\utn\frbb\tup\controller\ClienteControllerTest.class
+ar\edu\utn\frbb\tup\service\ClienteServiceTest.class
+ar\edu\utn\frbb\tup\controller\CuentaControllerTest.class
+ar\edu\utn\frbb\tup\controller\validator\CuentaValidatorTest.class
+ar\edu\utn\frbb\tup\service\CuentaServiceTest.class
+ar\edu\utn\frbb\tup\controller\validator\ClienteValidatorTest.class
+ar\edu\utn\frbb\tup\service\MovimientosServiceTest.class

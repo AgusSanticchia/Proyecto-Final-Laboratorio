@@ -47,7 +47,7 @@ http://localhost:8080/swagger-ui/index.html
 ### Cuenta
 
 - POST /api/cuenta  Crear una cuenta para un cliente
-- GET /api/cuenta/{cbu}  Buscar cuenta por CBU
+- GET /api/cuenta/{id}  Buscar cuenta por CBU
 - GET /api/cuenta/cliente/{dni}  Listar cuentas de un cliente
 
 ### Movimientos
