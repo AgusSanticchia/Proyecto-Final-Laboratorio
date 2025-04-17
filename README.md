@@ -34,6 +34,7 @@ Este proyecto simula un sistema bancario y fue desarrollado como trabajo final p
    ```
 
 Una vez que el proyecto esta en ejecución, accede a Swagger para probar los endpoints desde el navegador:
+
 http://localhost:8080/swagger-ui/index.html
 
 ## Endpoints Principales
@@ -47,14 +48,15 @@ http://localhost:8080/swagger-ui/index.html
 ### Cuenta
 
 - POST /api/cuenta  Crear una cuenta para un cliente
-- GET /api/cuenta/{cbu}  Buscar cuenta por CBU
-- GET /api/cuenta/cliente/{dni}  Listar cuentas de un cliente
+- GET /api/cuenta/  Listar cuentas de clientes
+- GET /api/cuenta/{idCuenta}  Buscar cuenta por ID
 
 ### Movimientos
 
-- POST /api/movimientos/deposito  Depositar dinero
-- POST /api/movimientos/extraccion  Retirar dinero
+- POST /api/movimientos/depositos  Depositar dinero
+- POST /api/movimientos/retiros  Retirar dinero
 - POST /api/movimientos/transferencia  Transferir entre cuentas
+- GET /api/movimientos/{cuentaId} Obtener movimientos de una cuenta
 
 ## Pruebas
 
